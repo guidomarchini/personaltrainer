@@ -1,7 +1,8 @@
 package unq.edu.remotetrainer.model
 
-import unq.edu.remotetrainer.model.Exercise
-
+/**
+ * Defines a quantity of a given exercise has to be done
+ */
 data class ExerciseRepetition (
         val id: Int?,
         val exercise: Exercise,

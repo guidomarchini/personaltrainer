@@ -4,7 +4,10 @@ plugins {
 	id("org.springframework.boot") version "2.2.6.RELEASE"
 	id("io.spring.dependency-management") version "1.0.9.RELEASE"
 	kotlin("jvm") version "1.3.71"
+	kotlin("plugin.allopen") version "1.3.71"
+	kotlin("plugin.jpa") version "1.3.71"
 	kotlin("plugin.spring") version "1.3.71"
+	kotlin("kapt") version "1.3.61"
 }
 
 group = "unq.edu"
@@ -24,31 +27,44 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	// spring libraries
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-mustache")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+		exclude(module = "mockito-core")
 	}
+	runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
 	// joda time
-	implementation("joda-time:joda-time:${property("jodatime_version")}")
+	implementation("joda-time:joda-time:2.10.5")
 
-	// inject support
-	implementation("javax.inject:javax.inject:${property("javax_version")}")
+	// persistence
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	runtimeOnly("com.h2database:h2")
 
-	// database
-	implementation("org.jetbrains.exposed:exposed-core:${property("exposed_version")}")
-	implementation("org.jetbrains.exposed:exposed-dao:${property("exposed_version")}")
-	implementation("org.jetbrains.exposed:exposed-jdbc:${property("exposed_version")}")
-	implementation("org.jetbrains.exposed:exposed-jodatime:${property("exposed_version")}")
+	// test
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "1.8"
 	}
+}
+
+// persistence annotations
+allOpen {
+	annotation("javax.persistence.Entity")
+	annotation("javax.persistence.Embeddable")
+	annotation("javax.persistence.MappedSuperclass")
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
 }
