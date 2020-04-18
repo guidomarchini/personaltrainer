@@ -3,7 +3,7 @@ package unq.edu.remotetrainer.persistence.dao
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import remotetrainer.definitions.TrackingTable
+import unq.edu.remotetrainer.persistence.definitions.TrackingTable
 
 class TrackingDao(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<TrackingDao>(TrackingTable)

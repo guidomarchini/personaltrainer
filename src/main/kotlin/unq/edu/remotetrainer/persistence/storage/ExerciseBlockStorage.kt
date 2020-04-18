@@ -1,7 +1,6 @@
 package unq.edu.remotetrainer.persistence.storage
 
 import unq.edu.remotetrainer.persistence.RemoteTrainerDatabase
-import remotetrainer.storage.ExerciseRepetitionStorage
 import unq.edu.remotetrainer.persistence.definitions.ExerciseBlockTable
 import javax.inject.Inject
 

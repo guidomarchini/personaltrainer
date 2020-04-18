@@ -1,11 +1,13 @@
 package unq.edu.remotetrainer.persistence.storage
 
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.update
+import unq.edu.remotetrainer.model.ExerciseRepetition
 import unq.edu.remotetrainer.persistence.RemoteTrainerDatabase
 import unq.edu.remotetrainer.persistence.dao.ExerciseBlockDao
-import remotetrainer.dao.ExerciseDao
-import remotetrainer.dao.ExerciseRepetitionDao
-import remotetrainer.definitions.ExerciseRepetitionTable
-import remotetrainer.model.ExerciseRepetition
+import unq.edu.remotetrainer.persistence.dao.ExerciseDao
+import unq.edu.remotetrainer.persistence.dao.ExerciseRepetitionDao
+import unq.edu.remotetrainer.persistence.definitions.ExerciseRepetitionTable
 import javax.inject.Inject
 
 class ExerciseRepetitionStorage

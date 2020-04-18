@@ -1,7 +1,6 @@
 package unq.edu.remotetrainer.persistence.definitions
 
 import org.jetbrains.exposed.dao.id.IntIdTable
-import unq.edu.remotetrainer.persistence.definitions.ExerciseBlockTable
 
 
 object ExerciseRepetitionTable : IntIdTable() {
