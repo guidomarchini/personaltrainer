@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.api
+package unq.edu.remotetrainer.model
 
 /**
  * Exercise progression can be tracked with this class.
@@ -6,6 +6,6 @@ package unq.edu.remotetrainer.api
  */
 data class Tracking (
         val id: Int?,
-        val exerciseTracking: Collection<ExerciseTracking>,
+        val exerciseTrackings: Collection<ExerciseTracking>,
         val favourite: Boolean
 )

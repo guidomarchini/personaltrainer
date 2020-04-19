@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.api
+package unq.edu.remotetrainer.model
 
 import org.joda.time.LocalDate
 
