@@ -1,6 +1,6 @@
 package unq.edu.remotetrainer.persistence.entity
 
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -11,7 +11,7 @@ class RoutineEntity (
     @Id @GeneratedValue
     var id: Int?,
 
-    var date: DateTime,
+    var date: LocalDate,
 
     @OneToMany(targetEntity = ExerciseBlockEntity::class)
     var exerciseBlocks: List<ExerciseBlockEntity>,

@@ -8,7 +8,7 @@ class ExerciseBlockEntity (
     var id: Int?,
 
     @OneToMany(targetEntity = ExerciseRepetitionEntity::class)
-    var exercises: List<ExerciseRepetitionEntity>,
+    var exercises: Collection<ExerciseRepetitionEntity>,
 
     var notes: String
 )

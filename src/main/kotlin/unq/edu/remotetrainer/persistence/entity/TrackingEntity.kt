@@ -1,19 +1,14 @@
 package unq.edu.remotetrainer.persistence.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
 class TrackingEntity (
     @Id @GeneratedValue
     var id: Int?,
 
-    @ManyToOne
-    var exercise: ExerciseEntity,
-
-    var quantity: Int,
+    @OneToMany(targetEntity = ExerciseEntity::class)
+    var exerciseTrackings: Collection<ExerciseTrackingEntity>,
 
     var favourite: Boolean
 )

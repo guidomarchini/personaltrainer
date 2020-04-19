@@ -1,6 +1,6 @@
-package unq.edu.remotetrainer.model
+package unq.edu.remotetrainer.api
 
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 /**
  * A daily routine.
@@ -9,7 +9,7 @@ import org.joda.time.DateTime
  */
 data class Routine (
     val id: Int?,
-    val date: DateTime,
+    val date: LocalDate,
     val exerciseBlocks: List<ExerciseBlock>,
     val notes: String
 )

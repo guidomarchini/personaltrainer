@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.model
+package unq.edu.remotetrainer.api
 
 /**
  * An {@link ExerciseBlock} is a sequence of exercises that can be repeated N times.

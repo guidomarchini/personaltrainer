@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.model
+package unq.edu.remotetrainer.api
 
 /**
  * A {@link TrackingProfile} is used to keep the tracking of the clients, or self.

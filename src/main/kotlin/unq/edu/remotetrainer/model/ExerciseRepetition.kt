@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.model
+package unq.edu.remotetrainer.api
 
 /**
  * Defines a quantity of a given exercise has to be done
