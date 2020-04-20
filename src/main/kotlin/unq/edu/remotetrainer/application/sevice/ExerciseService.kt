@@ -27,10 +27,15 @@ class ExerciseService constructor(
         }
     }
 
+    fun getExerciseById(id: Int): Exercise? {
+        val found: ExerciseEntity? = exerciseRepository.getById(id)
+        return found?.let { exerciseMapper.toModel(it) }
+    }
+
     fun updateExercise(exercise: Exercise): Exercise {
         val id: Int = checkNotNull(exercise.id)
         val exerciseToUpdate: ExerciseEntity =
-            checkNotNull(exerciseRepository.findByIdOrNull(exercise.id))
+            checkNotNull(exerciseRepository.findByIdOrNull(id))
 
         exerciseToUpdate.description = exercise.description
         exerciseToUpdate.name = exercise.name

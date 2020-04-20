@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration
 import unq.edu.remotetrainer.application.sevice.ExerciseService
 import unq.edu.remotetrainer.model.Exercise
 
+/**
+ * Application configuration
+ */
 @Configuration
 class RemoteTrainerConfiguration {
 

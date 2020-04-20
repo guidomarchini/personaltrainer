@@ -2,10 +2,11 @@ package unq.edu.remotetrainer.persistence.repository
 
 import org.springframework.data.repository.CrudRepository
 import unq.edu.remotetrainer.persistence.entity.*
+import java.util.*
 
 interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
     fun getByName(name: String): ExerciseEntity?
-//    fun getAllByName(names: Collection<String>): Iterable<ExerciseEntity>
+    fun getById(id: Int): ExerciseEntity?
     fun getExerciseEntitiesByNameIn(names: Collection<String>): Iterable<ExerciseEntity>
 }
 

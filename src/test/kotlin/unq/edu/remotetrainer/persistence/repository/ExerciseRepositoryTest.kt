@@ -106,6 +106,23 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
+    fun `It gets by id`() {
+        // arrange
+        val pullups: ExerciseEntity = ExerciseEntity(
+            name = "Pullups",
+            description = "They're hard!"
+        )
+        entityManager.persistAndFlush(pullups)
+
+        // act
+        val found = exerciseRepository.getById(pullups.id!!)
+
+        // assert
+        assertThat(found).isNotNull()
+        assertThat(found).isEqualTo(pullups)
+    }
+
+    @Test
     fun `It gets all by name`() {
         // arrange
         val pullupsName: String = "Pullups"
