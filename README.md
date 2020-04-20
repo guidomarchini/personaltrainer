@@ -32,3 +32,7 @@ Se pueden encontrar distintos paquetes que representan las distintas capas:
 - Application
 - - Service
 - - Controller
+
+
+## Whishlist
+- Tener un browser de ejercicios que suba la comunidad para que se puedan importar. Pueden ser progresiones que ayuden a mejorar un ejercicio, una rutina, etc. El usuario va a poder asignar esas rutinas en distintos brackets de dias.
