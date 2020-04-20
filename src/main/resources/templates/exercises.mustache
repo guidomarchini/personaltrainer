@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <h1>Ejercicios</h1>
+
+        {{#exercises}}
+            <section>
+                <button>{{name}}</button>
+                <div>{{description}}</div>
+                {{#link}}
+                    <a href="{{{link}}}">ver video</a>
+                {{/link}}
+            </section>
+        {{/exercises}}
+    </body>
+</html>

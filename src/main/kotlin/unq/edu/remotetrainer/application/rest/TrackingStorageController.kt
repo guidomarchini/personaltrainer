@@ -1,4 +1,4 @@
-package unq.edu.remotetrainer.application.controller
+package unq.edu.remotetrainer.application.rest
 
 import org.springframework.web.bind.annotation.RestController
 

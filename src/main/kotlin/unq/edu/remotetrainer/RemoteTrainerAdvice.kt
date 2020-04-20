@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import unq.edu.remotetrainer.application.controller.exceptions.ExerciseNotFoundException
+import unq.edu.remotetrainer.application.rest.exceptions.ExerciseNotFoundException
 
 /**
  * Defines the exceptions return http status code

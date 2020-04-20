@@ -1,16 +1,16 @@
-package unq.edu.remotetrainer.application.controller
+package unq.edu.remotetrainer.application.rest
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import unq.edu.remotetrainer.application.controller.exceptions.ExerciseNotFoundException
+import unq.edu.remotetrainer.application.rest.exceptions.ExerciseNotFoundException
 import unq.edu.remotetrainer.application.sevice.ExerciseService
 import unq.edu.remotetrainer.model.Exercise
 
 @RestController
+@RequestMapping("/api")
 class ExerciseController constructor(
-    @Autowired val exerciseService: ExerciseService
+    private val exerciseService: ExerciseService
 ){
 
     @GetMapping("/exercises")
