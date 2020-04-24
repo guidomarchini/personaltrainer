@@ -1,7 +1,6 @@
 package unq.edu.remotetrainer.application.rest
 
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import unq.edu.remotetrainer.application.rest.exceptions.ExerciseNotFoundException
 import unq.edu.remotetrainer.application.sevice.ExerciseService
@@ -29,9 +28,15 @@ class ExerciseController constructor(
         return exerciseService.createExercise(exercise)
     }
 
+    @PutMapping("/exercises")
+    fun update(@RequestBody exercise: Exercise): Exercise {
+        checkNotNull(exercise.id)
+        return exerciseService.updateExercise(exercise)
+    }
+
     @DeleteMapping("/exercises/{id}")
-    fun deleteExercise(@PathVariable id: Int): ResponseEntity<Unit> {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteExercise(@PathVariable id: Int): Unit {
         exerciseService.deleteExercise(id)
-        return ResponseEntity.noContent().build()
     }
 }

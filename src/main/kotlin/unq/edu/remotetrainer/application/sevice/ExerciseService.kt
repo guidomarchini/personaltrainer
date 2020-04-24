@@ -33,13 +33,18 @@ class ExerciseService constructor(
     }
 
     fun updateExercise(exercise: Exercise): Exercise {
+        // TODO find by name doesn't have different id
+
         val id: Int = checkNotNull(exercise.id)
         val exerciseToUpdate: ExerciseEntity =
             checkNotNull(exerciseRepository.findByIdOrNull(id))
 
+
         exerciseToUpdate.description = exercise.description
         exerciseToUpdate.name = exercise.name
         exerciseToUpdate.link = exercise.link
+
+        exerciseRepository.save(exerciseToUpdate)
 
         return exerciseMapper.toModel(exerciseToUpdate)
     }

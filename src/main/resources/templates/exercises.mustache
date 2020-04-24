@@ -1,15 +1,209 @@
 <html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script>
+            // api calls
+            function deleteExercise(id) {
+                fetch(`api/exercises/${id}`, {
+                    method: 'DELETE'
+                }).then(function(response) {
+                    location.reload()
+                })
+            }
+
+            function createExercise() {
+                const body = {
+                    "name": $('#exercise-create-name').val(),
+                    "description": $('#exercise-create-description').val(),
+                    "link": $('#exercise-create-link').val()
+                }
+
+                fetch('api/exercises', {
+                    method: 'POST',
+                    body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        console.log(response.body)
+                    }
+                })
+            }
+
+            function editExercise(id) {
+                const body = {
+                    "id": id,
+                    "name": $('#exercise-edit-name').val(),
+                    "description": $('#exercise-edit-description').val(),
+                    "link": $('#exercise-edit-link').val()
+                }
+
+                fetch('api/exercises', {
+                    method: 'PUT',
+                    body: JSON.stringify(body),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        console.log(response.body)
+                    }
+                })
+            }
+        </script>
+    </head>
+
+
     <body>
         <h1>Ejercicios</h1>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exercise-create-modal">Crear nuevo ejercicio</button>
 
         {{#exercises}}
             <section>
-                <button>{{name}}</button>
-                <div>{{description}}</div>
-                {{#link}}
-                    <a href="{{{link}}}">ver video</a>
-                {{/link}}
+                <div class="btn btn-primary" data-toggle="collapse" id="exercise-name-{{id}}" data-target="#div-{{id}}">{{name}}</div>
+                <div id="div-{{id}}" class="collapse">
+                    <div id="exercise-description-{{id}}">{{description}}</div>
+                    {{#link}}
+                        <a href="{{{link}}}" id="exercise-link-{{id}}">Ver video</a>
+                    {{/link}}
+
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-edit-modal" data-id="{{id}}">Editar</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-delete-modal" data-id="{{id}}">Eliminar</button>
+                    </div>
+
+                </div>
             </section>
         {{/exercises}}
+
+
+        <!-- Create popup -->
+        <div class="modal fade" id="exercise-create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exercise-create-title">Crear nuevo ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="exercise-create-content">
+                            <div>
+                                <label for="exercise-create-name">Nombre: </label>
+                                <input class="form-control" name="name" id="exercise-create-name"/>
+                            </div>
+                            <div>
+                                <label for="exercise-create-description">Descripcion:</label>
+                                <textarea class="form-control" name="description" id="exercise-create-description"></textarea>
+                            </div>
+                            <div>
+                                <label for="exercise-create-link">Link del video: </label>
+                                <input class="form-control" name="link" id="exercise-create-link"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="createExercise()">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit popup -->
+        <div class="modal fade" id="exercise-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exercise-edit-title">Editar ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="exercise-edit-content">
+                            <div>
+                                <label for="exercise-edit-name">Nombre: </label>
+                                <input class="form-control" name="name" id="exercise-edit-name"/>
+                            </div>
+                            <div>
+                                <label for="exercise-edit-description">Descripcion:</label>
+                                <textarea class="form-control" name="description" id="exercise-edit-description"></textarea>
+                            </div>
+                            <div>
+                                <label for="exercise-edit-link">Link del video: </label>
+                                <input class="form-control" name="link" id="exercise-edit-link"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="exercise-edit-button">Editar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DELETE popup -->
+        <div class="modal fade" id="exercise-delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exercise-delete-title">Borrar ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="exercise-delete-content">
+                            <label>Esta seguro de que quiere eliminar </label>
+                            <p id="exercise-delete-name">&times;</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="exercise-delete-button">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            // following doesn't work even with document.onload
+
+            // Modal on show
+            $('#exercise-edit-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#exercise-edit-name').val($(`#exercise-name-${id}`).text())
+                modal.find('#exercise-edit-description').val($(`#exercise-description-${id}`).text())
+                modal.find('#exercise-edit-link').val($(`#exercise-link-${id}`).attr("href"))
+                modal.find('#exercise-edit-button').click(function() {editExercise(id)})
+            })
+
+            $('#exercise-delete-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#exercise-delete-name').text($(`#exercise-name-${id}`).text())
+                modal.find('#exercise-delete-button').click(function() {deleteExercise(id)})
+            })
+        </script>
     </body>
+
+
 </html>
