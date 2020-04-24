@@ -8,7 +8,7 @@ Muchos entrenadores personales tienen la modalidad de enseñar a la distancia, d
 - El profesor tiene que explicar muchas veces un mismo ejercicio, y a veces se puede volver difícil hacerlo vía chat.
 - Tenemos el mismo problema para seguir el progreso.
 
-Ante la necesidad de tener dichos puntos centralizados y organizados, se presenta la idea de desarrollar una aplicación mobile.
+Ante la necesidad de tener dichos puntos centralizados y organizados, se presenta la idea de desarrollar una aplicación.
 
 ## Idea de la aplicacion
 
