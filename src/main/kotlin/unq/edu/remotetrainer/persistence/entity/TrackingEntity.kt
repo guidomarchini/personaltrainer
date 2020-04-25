@@ -4,10 +4,13 @@ import javax.persistence.*
 
 @Entity
 class TrackingEntity (
-    @Id @GeneratedValue
-    var id: Int?,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
 
-    @OneToMany(targetEntity = ExerciseEntity::class)
+    @ManyToOne
+    var exercise: ExerciseEntity,
+
+    @OneToMany(targetEntity = ExerciseTrackingEntity::class)
     var exerciseTrackings: Collection<ExerciseTrackingEntity>,
 
     var favourite: Boolean

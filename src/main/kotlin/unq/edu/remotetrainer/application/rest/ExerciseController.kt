@@ -37,6 +37,7 @@ class ExerciseController constructor(
     @DeleteMapping("/exercises/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteExercise(@PathVariable id: Int): Unit {
+        // TODO not used
         exerciseService.deleteExercise(id)
     }
 }

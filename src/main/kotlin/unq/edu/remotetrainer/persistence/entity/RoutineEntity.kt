@@ -1,15 +1,12 @@
 package unq.edu.remotetrainer.persistence.entity
 
 import org.joda.time.LocalDate
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 @Entity
 class RoutineEntity (
-    @Id @GeneratedValue
-    var id: Int?,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
 
     var date: LocalDate,
 

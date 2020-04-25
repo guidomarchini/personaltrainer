@@ -1,0 +1,153 @@
+<html>
+    <head>
+        {{> common-libraries}}
+
+        <script>
+            function favourite(id) {
+                id // TODO
+            }
+
+            function createTracking() {
+                const body = $('#tracking-create-exercise :selected').val();
+                fetch('api/trackings', {
+                    method: 'POST',
+                    body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        console.log(response.body)
+                    }
+                })
+            }
+
+            function addTracking(id) {
+                const body = $('#tracking-add-quantity').val()
+                fetch(`api/trackings/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        console.log(response.body)
+                    }
+                })
+            }
+        </script>
+    </head>
+
+
+    <body>
+        <h1>Seguimiento de ejercicios</h1>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#tracking-create-modal">Seguir un nuevo ejercicio</button>
+
+        <div class="container">
+            {{#trackings}}
+            <div class="container">
+                <a href="#" class="container-sm btn btn-primary" role="button" data-toggle="collapse" id="tracking-name-{{id}}" data-target="#div-{{id}}">{{exercise.name}}</a>
+                <div id="div-{{id}}" class="collapse">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">Fecha</div>
+                            <div class="col">Repeticiones</div>
+                            {{#exerciseTrackings}}
+                            <div class="w-100"></div>
+                            <div class="col">{{date}}</div>
+                            <div class="col">{{quantity}}</div>
+                            {{/exerciseTrackings}}
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tracking-add-modal" data-id="{{id}}">Agregar seguimiento</button>
+                        <button type="button" class="btn btn-secondary" onclick="favourite('{{id}}')">Marcar como favorito (WIP)</button>
+                    </div>
+
+                </div>
+            </div>
+            {{/trackings}}
+        </div>
+
+
+
+        <!-- Create popup -->
+        <div class="modal fade" id="tracking-create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tracking-create-title">Crear nuevo seguimiento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="tracking-create-content">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="tracking-create-exercise">Ejercicio</label>
+                                </div>
+                                <select class="custom-select" id="tracking-create-exercise">
+                                    {{#exercises}}
+                                    <option value="{{id}}">{{name}}</option>
+                                    {{/exercises}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="createTracking()">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD TRACKING popup -->
+        <div class="modal fade" id="tracking-add-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tracking-add-title">Agregar seguimiento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="tracking-add-content">
+                            <label for="tracking-add-quantity">Cuanto hiciste hoy?</label>
+                            <input class="form-control" name="quantity" id="tracking-add-quantity"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="tracking-add-button">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script>
+            // following doesn't work even with document.onload
+
+            // Modal on show
+            $('#tracking-add-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#tracking-add-button').click(function() {addTracking(id)})
+            })
+        </script>
+    </body>
+</html>

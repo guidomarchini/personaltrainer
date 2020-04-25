@@ -28,8 +28,8 @@ class ExerciseService constructor(
     }
 
     fun getExerciseById(id: Int): Exercise? {
-        val found: ExerciseEntity? = exerciseRepository.getById(id)
-        return found?.let { exerciseMapper.toModel(it) }
+        return exerciseRepository.getById(id)
+            ?.let { exerciseMapper.toModel(it) }
     }
 
     fun updateExercise(exercise: Exercise): Exercise {
@@ -39,14 +39,13 @@ class ExerciseService constructor(
         val exerciseToUpdate: ExerciseEntity =
             checkNotNull(exerciseRepository.findByIdOrNull(id))
 
-
         exerciseToUpdate.description = exercise.description
         exerciseToUpdate.name = exercise.name
         exerciseToUpdate.link = exercise.link
 
-        exerciseRepository.save(exerciseToUpdate)
-
-        return exerciseMapper.toModel(exerciseToUpdate)
+        return exerciseMapper.toModel(
+            exerciseRepository.save(exerciseToUpdate)
+        )
     }
 
     fun deleteExercise(id: Int): Unit {
