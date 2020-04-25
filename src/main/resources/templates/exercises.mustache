@@ -8,7 +8,11 @@
                 fetch(`api/exercises/${id}`, {
                     method: 'DELETE'
                 }).then(function(response) {
-                    location.reload()
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        console.log(response.body)
+                    }
                 })
             }
 
