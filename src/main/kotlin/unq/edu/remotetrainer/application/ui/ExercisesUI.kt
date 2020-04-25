@@ -15,6 +15,11 @@ class ExercisesUI constructor(
     val trackingService: TrackingService
 ) {
 
+    @GetMapping("")
+    fun home(model: Model): String {
+        return "home"
+    }
+
     @GetMapping("/exercises")
     fun exercises(model: Model): String {
         // TODO sorted by name
