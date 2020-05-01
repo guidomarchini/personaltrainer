@@ -43,46 +43,51 @@
         </script>
     </head>
 
-    <body>
+    <body class="bg-light">
         {{>navigation}}
-        <br/>
 
+        <main role="main" class="container">
+            <h1>Seguimiento de ejercicios</h1>
+            <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#tracking-create-modal">Seguir un nuevo ejercicio</button>
 
-        <h1>Seguimiento de ejercicios</h1>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#tracking-create-modal">Seguir un nuevo ejercicio</button>
-
-        <br/>
-        <br/>
-        <br/>
-
-        <div class="container">
-            {{#trackings}}
-            <div class="container">
-                <a href="#" class="container-sm btn btn-primary" role="button" data-toggle="collapse" id="tracking-name-{{id}}" data-target="#div-{{id}}">{{exercise.name}}</a>
-                <div id="div-{{id}}" class="collapse">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">Fecha</div>
-                            <div class="col">Repeticiones</div>
-                            {{#exerciseTrackings}}
-                            <div class="w-100"></div>
-                            <div class="col">{{date}}</div>
-                            <div class="col">{{quantity}}</div>
-                            {{/exerciseTrackings}}
+            <div class="container pt-3">
+                {{#trackings}}
+                <div class="container">
+                    <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="tracking-name-{{id}}" data-target="#div-{{id}}">{{exercise.name}}</a>
+                    <div id="div-{{id}}" class="collapse pb-3">
+                        <div class="container pb-2">
+                            <table class="table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Repeticiones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#exerciseTrackings}}
+                                    <tr>
+                                        <td>{{date}}</td>
+                                        <td>{{quantity}}</td>
+                                    </tr>
+                                    {{/exerciseTrackings}}
+                                </tbody>
+                            </table>
                         </div>
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tracking-add-modal" data-id="{{id}}">Agregar seguimiento</button>
+                            <button type="button" class="btn btn-secondary" onclick="favourite('{{id}}')">Marcar como favorito (WIP)</button>
+                        </div>
+
                     </div>
-
-                    <br/>
-
-                    <div class="text-right">
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tracking-add-modal" data-id="{{id}}">Agregar seguimiento</button>
-                        <button type="button" class="btn btn-secondary" onclick="favourite('{{id}}')">Marcar como favorito (WIP)</button>
-                    </div>
-
                 </div>
+                {{/trackings}}
             </div>
-            {{/trackings}}
-        </div>
+        </main>
+
+
+
+
 
 
 
@@ -112,7 +117,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" onclick="createTracking()">Crear</button>
+                        <button type="button" class="btn btn-dark" onclick="createTracking()">Crear</button>
                     </div>
                 </div>
             </div>
@@ -136,7 +141,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="tracking-add-button">Aceptar</button>
+                        <button type="button" class="btn btn-dark" id="tracking-add-button">Aceptar</button>
                     </div>
                 </div>
             </div>
@@ -156,6 +161,8 @@
                 const modal = $(this)
                 modal.find('#tracking-add-button').click(function() {addTracking(id)})
             })
+
+            $('#nav-tracking').addClass('active')
         </script>
     </body>
 </html>

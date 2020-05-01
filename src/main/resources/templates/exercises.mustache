@@ -64,44 +64,44 @@
     </head>
 
 
-    <body>
+    <body class="bg-light">
         {{>navigation}}
-        <br/>
 
-        <h1>Ejercicios</h1>
-        <div class="input-group md-form form-sm form-1 pl-0">
-            <div class="input-group-prepend">
-                <span class="input-group-text cyan lighten-2" id="basic-text1">
-                    <i class="fas fa-search text-white" aria-hidden="true"></i>
-                </span>
-            </div>
-            <input class="form-control my-0 py-1" type="text" placeholder="Proximamente..." aria-label="Search" />
-        </div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exercise-create-modal">Crear nuevo ejercicio</button>
-
-        <br/>
-        <br/>
-        <br/>
-
-        <div class="container">
-            {{#exercises}}
-            <div class="container">
-                <a href="#" class="container-sm btn btn-primary" role="button" data-toggle="collapse" id="exercise-name-{{id}}" data-target="#div-{{id}}">{{name}}</a>
-                <div id="div-{{id}}" class="collapse">
-                    <p class="list-group-item lead" id="exercise-description-{{id}}">{{description}}</p>
-                    {{#link}}
-                    <a href="{{{link}}}" id="exercise-link-{{id}}">Ver video</a>
-                    {{/link}}
-
-                    <div class="text-right">
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-edit-modal" data-id="{{id}}">Editar</button>
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-delete-modal" data-id="{{id}}">Eliminar</button>
-                    </div>
-
+        <main role="main" class="container">
+            <h1>Ejercicios</h1>
+            <div class="input-group md-form form-sm form-1 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text cyan lighten-2" id="basic-text1">
+                        <i class="fas fa-search text-white" aria-hidden="true"></i>
+                    </span>
                 </div>
+                <input class="form-control my-0 py-1" type="text" placeholder="Proximamente..." aria-label="Search" />
             </div>
-            {{/exercises}}
-        </div>
+            <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#exercise-create-modal">Crear nuevo ejercicio</button>
+
+            <div class="container pt-3">
+                {{#exercises}}
+                <div class="container">
+                    <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="exercise-name-{{id}}" data-target="#collapsable-{{id}}">{{name}}</a>
+                    <div id="collapsable-{{id}}" class="collapse pb-3">
+                        <p class="list-group-item lead" id="exercise-description-{{id}}">{{description}}</p>
+                        {{#link}}
+                        <a href="{{{link}}}" id="exercise-link-{{id}}">Ver video</a>
+                        {{/link}}
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-edit-modal" data-id="{{id}}">Editar</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exercise-delete-modal" data-id="{{id}}">Eliminar</button>
+                        </div>
+
+                    </div>
+                </div>
+                {{/exercises}}
+            </div>
+        </main>
+
+
+
 
 
         <!-- Create popup -->
@@ -132,7 +132,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" onclick="createExercise()">Crear</button>
+                        <button type="button" class="btn btn-dark" onclick="createExercise()">Crear</button>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="exercise-edit-button">Editar</button>
+                        <button type="button" class="btn btn-dark" id="exercise-edit-button">Editar</button>
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="exercise-delete-button">Eliminar</button>
+                        <button type="button" class="btn btn-dark" id="exercise-delete-button">Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -220,6 +220,7 @@
                 modal.find('#exercise-delete-name').text($(`#exercise-name-${id}`).text())
                 modal.find('#exercise-delete-button').click(function() {deleteExercise(id)})
             })
+
         </script>
     </body>
 
