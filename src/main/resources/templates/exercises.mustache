@@ -1,6 +1,6 @@
 <html>
     <head>
-        {{> common-libraries}}
+        {{> common/common-libraries}}
 
         <script>
             // api calls
@@ -65,7 +65,7 @@
 
 
     <body class="bg-light">
-        {{>navigation}}
+        {{> common/navigation}}
 
         <main role="main" class="container">
             <h1>Ejercicios</h1>
@@ -221,6 +221,7 @@
                 modal.find('#exercise-delete-button').click(function() {deleteExercise(id)})
             })
 
+            $('#nav-exercise').addClass('active')
         </script>
     </body>
 
