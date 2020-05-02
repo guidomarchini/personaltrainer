@@ -16,15 +16,15 @@ class RemoteTrainerConfiguration {
     fun dataInitializer(
         exerciseService: ExerciseService
     ) = ApplicationRunner {
-        exerciseService.createExercise(Exercise(
-            name = "pullups",
-            description = "they're hard!"
-        ))
-
-        exerciseService.createExercise(
-            Exercise(
-            name = "pushups",
-            description = "you can start with these ones!"
-        ))
+//        exerciseService.createExercise(Exercise(
+//            name = "pullups",
+//            description = "they're hard!"
+//        ))
+//
+//        exerciseService.createExercise(
+//            Exercise(
+//            name = "pushups",
+//            description = "you can start with these ones!"
+//        ))
     }
 }
