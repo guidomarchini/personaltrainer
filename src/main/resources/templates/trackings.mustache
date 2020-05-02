@@ -19,7 +19,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        console.log(response.body)
+                        onError(response)
                     }
                 })
             }
@@ -36,7 +36,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        console.log(response.body)
+                        onError(response)
                     }
                 })
             }
@@ -45,6 +45,8 @@
 
     <body class="bg-light">
         {{> common/navigation}}
+        {{> common/errors}}
+
 
         <main role="main" class="container">
             <h1>Seguimiento de ejercicios</h1>
@@ -84,8 +86,6 @@
                 {{/trackings}}
             </div>
         </main>
-
-
 
 
 
