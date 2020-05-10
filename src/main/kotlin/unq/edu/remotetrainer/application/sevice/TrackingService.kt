@@ -53,7 +53,7 @@ class TrackingService constructor(
         )
     }
 
-    fun getAllTrackings(): Collection<Tracking> {
+    fun getAllTrackings(): List<Tracking> {
         return trackingRepository.findAll().map {
             trackingMapper.toModel(it)
         }

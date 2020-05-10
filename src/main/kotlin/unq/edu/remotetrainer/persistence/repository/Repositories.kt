@@ -6,8 +6,9 @@ import java.util.*
 
 interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
     fun getByName(name: String): ExerciseEntity?
+    fun getAllByName(name: String): Iterable<ExerciseEntity>
     fun getById(id: Int): ExerciseEntity?
-    fun getExerciseEntitiesByNameIn(names: Collection<String>): Iterable<ExerciseEntity>
+    fun getExerciseEntitiesByNameIn(names: List<String>): Iterable<ExerciseEntity>
 }
 
 interface ExerciseBlockRepository : CrudRepository<ExerciseBlockEntity, Int>

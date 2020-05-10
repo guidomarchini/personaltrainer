@@ -16,7 +16,7 @@ class TrackingController constructor(
     val exerciseService: ExerciseService
 ){
     @GetMapping("/trackings")
-    fun trackings(): Collection<Tracking> {
+    fun trackings(): List<Tracking> {
         return trackingService.getAllTrackings()
     }
 

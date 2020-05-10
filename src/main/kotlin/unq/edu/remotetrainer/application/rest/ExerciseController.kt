@@ -13,7 +13,7 @@ class ExerciseController constructor(
 ){
 
     @GetMapping("/exercises")
-    fun exercises(): Collection<Exercise> {
+    fun exercises(): List<Exercise> {
         return exerciseService.getAllExercises()
     }
 

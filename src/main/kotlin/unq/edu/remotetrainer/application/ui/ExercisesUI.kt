@@ -31,12 +31,12 @@ class ExercisesUI constructor(
     @GetMapping("/trackings")
     fun trackings(model: Model): String {
 
-        val allTrackings: Collection<Tracking> = trackingService.getAllTrackings()
+        val allTrackings: List<Tracking> = trackingService.getAllTrackings()
 
         val trackedExercises: Set<Exercise> =
             allTrackings.mapTo(HashSet(), { it.exercise })
 
-        val exercisesNotBeingTracked: Collection<Exercise> =
+        val exercisesNotBeingTracked: List<Exercise> =
             exerciseService.getAllExercises().filter {
                 !trackedExercises.contains(it)
         }

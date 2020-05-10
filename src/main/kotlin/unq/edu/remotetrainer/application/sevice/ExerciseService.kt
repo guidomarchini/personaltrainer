@@ -21,7 +21,7 @@ class ExerciseService constructor(
         )
     }
 
-    fun getAllExercises() : Collection<Exercise> {
+    fun getAllExercises() : List<Exercise> {
         return exerciseRepository.findAll().map {
             exerciseMapper.toModel(it)
         }
@@ -36,6 +36,10 @@ class ExerciseService constructor(
         // TODO find by name doesn't have different id
 
         val id: Int = checkNotNull(exercise.id)
+        val exercisesForName: Iterable<ExerciseEntity> =
+            exerciseRepository.getAllByName(exercise.name)
+        check(exercisesForName.all { it.id == id }) { "Another exercise with that name exists" }
+
         val exerciseToUpdate: ExerciseEntity =
             checkNotNull(exerciseRepository.findByIdOrNull(id))
 

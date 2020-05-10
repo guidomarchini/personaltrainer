@@ -47,6 +47,36 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
+    fun `it returns all exercises with the name`() {
+        // arrange
+        val exerciseName = "Pullups"
+        val pullups: ExerciseEntity = ExerciseEntity(
+            name = exerciseName,
+            description = "They're hard!"
+        )
+        val pullups2: ExerciseEntity = ExerciseEntity(
+            name = exerciseName,
+            description = "second exercise with same name"
+        )
+        val pullups3: ExerciseEntity = ExerciseEntity(
+            name = "anther $exerciseName",
+            description = "this one has different name"
+        )
+        entityManager.persist(pullups)
+        entityManager.persist(pullups2)
+        entityManager.persist(pullups3)
+        entityManager.flush()
+
+        // act
+        val foundPullups: Iterable<ExerciseEntity> =
+            exerciseRepository.getAllByName(exerciseName)
+
+        // assert
+        assertThat(foundPullups).hasSize(2)
+        assertThat(foundPullups).doesNotContain(pullups3)
+    }
+
+    @Test
     fun `The instance is updated`() {
         // arrange
         val oldDescription: String = "They're hard!"

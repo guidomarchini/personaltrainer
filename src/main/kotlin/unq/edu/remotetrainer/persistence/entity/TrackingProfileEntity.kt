@@ -10,5 +10,5 @@ class TrackingProfileEntity (
     var name: String,
 
     @OneToMany(targetEntity = TrackingEntity::class)
-    var trackings: Collection<TrackingEntity>
+    var trackings: List<TrackingEntity>
 )
