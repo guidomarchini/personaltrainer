@@ -10,7 +10,6 @@ import unq.edu.remotetrainer.persistence.entity.ExerciseEntity
 import unq.edu.remotetrainer.persistence.repository.ExerciseRepository
 import java.util.*
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class ExerciseServiceTest {
 
     val modelExercise: Exercise = Exercise(

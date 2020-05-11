@@ -47,6 +47,7 @@ dependencies {
 	runtimeOnly("mysql:mysql-connector-java")
 
 	// test
+	testImplementation( "io.rest-assured:kotlin-extensions:4.3.0")
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
