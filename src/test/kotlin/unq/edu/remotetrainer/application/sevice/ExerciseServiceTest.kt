@@ -89,10 +89,18 @@ internal class ExerciseServiceTest {
     }
 
     @Test
-    fun `update - checks the exercise id is not null`() {
-        assertThrows<IllegalStateException> {
-            exerciseService.updateExercise(sampleModelExercise())
-        }
+    fun `it gets exercises by name`() {
+        // arrange
+        val name: String = "some exercise"
+        whenever(exerciseRepositoryMock.getAllByName(name))
+            .thenReturn(listOf(entityExerciseMock))
+
+        // act
+        val result: List<Exercise> =
+            exerciseService.getAllExercisesByname(name)
+
+        // assert
+        assertThat(result).contains(modelExercise)
     }
 
     @Test

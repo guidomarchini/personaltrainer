@@ -4,9 +4,8 @@ import org.joda.time.LocalDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import unq.edu.remotetrainer.application.rest.exceptions.ExerciseNotFoundException
-import unq.edu.remotetrainer.application.rest.exceptions.TrackingNotFoundException
-import unq.edu.remotetrainer.mapper.ExerciseMapper
+import unq.edu.remotetrainer.application.rest.exception.ExerciseNotFoundException
+import unq.edu.remotetrainer.application.rest.exception.TrackingNotFoundException
 import unq.edu.remotetrainer.mapper.ExerciseTrackingMapper
 import unq.edu.remotetrainer.mapper.TrackingMapper
 import unq.edu.remotetrainer.model.ExerciseTracking
@@ -24,8 +23,7 @@ class TrackingService constructor(
     @Autowired val trackingMapper: TrackingMapper,
     @Autowired val exerciseTrackingRepository: ExerciseTrackingRepository,
     @Autowired val exerciseTrackingMapper: ExerciseTrackingMapper,
-    @Autowired val exerciseRepository: ExerciseRepository,
-    @Autowired val exerciseMapper: ExerciseMapper
+    @Autowired val exerciseRepository: ExerciseRepository
 ) {
     fun createTracking(tracking: Tracking): Tracking {
         return trackingMapper.toModel(
@@ -37,6 +35,8 @@ class TrackingService constructor(
 
     fun createEmptyTrackingForExercise(exerciseId: Int): Tracking {
         // TODO validate exercise not being tracked
+
+
         val exerciseEntity: ExerciseEntity =
             exerciseRepository.findByIdOrNull(exerciseId) ?: throw ExerciseNotFoundException(exerciseId)
 

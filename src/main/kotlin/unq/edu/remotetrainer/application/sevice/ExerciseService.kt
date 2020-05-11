@@ -27,21 +27,20 @@ class ExerciseService constructor(
         }
     }
 
+    fun getAllExercisesByname(name: String): List<Exercise> {
+        return exerciseRepository.getAllByName(name).map {
+            exerciseMapper.toModel(it)
+        }
+    }
+
     fun getExerciseById(id: Int): Exercise? {
         return exerciseRepository.getById(id)
             ?.let { exerciseMapper.toModel(it) }
     }
 
     fun updateExercise(exercise: Exercise): Exercise {
-        // TODO find by name doesn't have different id
-
-        val id: Int = checkNotNull(exercise.id)
-        val exercisesForName: Iterable<ExerciseEntity> =
-            exerciseRepository.getAllByName(exercise.name)
-        check(exercisesForName.all { it.id == id }) { "Another exercise with that name exists" }
-
         val exerciseToUpdate: ExerciseEntity =
-            checkNotNull(exerciseRepository.findByIdOrNull(id))
+            checkNotNull(exerciseRepository.findByIdOrNull(exercise.id!!))
 
         exerciseToUpdate.description = exercise.description
         exerciseToUpdate.name = exercise.name

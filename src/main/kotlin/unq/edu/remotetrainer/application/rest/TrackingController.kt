@@ -2,11 +2,9 @@ package unq.edu.remotetrainer.application.rest
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import unq.edu.remotetrainer.application.rest.exceptions.ExerciseNotFoundException
-import unq.edu.remotetrainer.application.rest.exceptions.TrackingNotFoundException
+import unq.edu.remotetrainer.application.rest.exception.TrackingNotFoundException
 import unq.edu.remotetrainer.application.sevice.ExerciseService
 import unq.edu.remotetrainer.application.sevice.TrackingService
-import unq.edu.remotetrainer.model.Exercise
 import unq.edu.remotetrainer.model.Tracking
 
 @RestController

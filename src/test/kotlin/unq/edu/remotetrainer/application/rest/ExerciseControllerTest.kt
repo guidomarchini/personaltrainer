@@ -96,31 +96,58 @@ class ExerciseControllerTest(
     }
 
     @Test
+    fun `create exercise with same name as existing one`(@Autowired restTemplate: TestRestTemplate) {
+        // arrange
+        val exerciseName = "some name"
+
+        val existingExercise: Exercise =
+            exerciseService.createExercise(
+                Exercise(
+                name = exerciseName,
+                description = "some description"
+            ))
+
+        val newExerciseDescription = "new description"
+        val newExerciseLink = "new link"
+
+        val newExercise: Exercise = Exercise(
+            name = exerciseName,
+            description = newExerciseDescription,
+            link = newExerciseLink
+        )
+
+        // act
+        given()
+            .body(newExercise)
+            .contentType(ContentType.JSON)
+            .post("/api/exercises")
+            // assert
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+
+        // remove the exercise
+        exerciseService.deleteExercise(existingExercise.id!!)
+    }
+
+    @Test
     fun `update exercise`(@Autowired restTemplate: TestRestTemplate) {
         // arrange
         val originalExerciseName = "new name"
         val originalExerciseDescription = "new description"
         val originalExerciseLink = "new link"
-        val originalExercise: Exercise = Exercise(
-            name = originalExerciseName,
-            description = originalExerciseDescription,
-            link = originalExerciseLink
-        )
-
-        val exerciseId: Int = given()
-            .body(originalExercise)
-            .contentType(ContentType.JSON)
-            .post("/api/exercises")
-            .then()
-            .statusCode(HttpStatus.CREATED.value())
-            .extract()
-            .path("id")
+        val existingExercise: Exercise =
+            exerciseService.createExercise(
+                Exercise(
+                    name = originalExerciseName,
+                    description = originalExerciseDescription,
+                    link = originalExerciseLink
+                ))
 
         val updatedExerciseName = "new name"
         val updatedExerciseDescription = "new description"
         val updatedExerciseLink = "new link"
         val updatedExercise: Exercise = Exercise(
-            id = exerciseId,
+            id = existingExercise.id,
             name = updatedExerciseName,
             description = updatedExerciseDescription,
             link = updatedExerciseLink
@@ -139,7 +166,53 @@ class ExerciseControllerTest(
             .body("link", equalTo(updatedExerciseLink))
 
         // remove the exercise
-        exerciseService.deleteExercise(exerciseId)
+        exerciseService.deleteExercise(existingExercise.id!!)
+    }
+
+    @Test
+    fun `update exercise with the same name as existing one`(@Autowired restTemplate: TestRestTemplate) {
+        // arrange
+        val originalExerciseName = "new name"
+        val originalExerciseDescription = "new description"
+        val originalExerciseLink = "new link"
+        val exerciseToUpdate: Exercise =
+            exerciseService.createExercise(
+                Exercise(
+                    name = originalExerciseName,
+                    description = originalExerciseDescription,
+                    link = originalExerciseLink
+                ))
+
+        val exerciseName = "some name"
+
+        val existingExercise: Exercise =
+            exerciseService.createExercise(
+                Exercise(
+                    name = exerciseName,
+                    description = "some description"
+                ))
+
+        val updatedExerciseDescription = "new description"
+        val updatedExerciseLink = "new link"
+        val updatedExercise: Exercise = Exercise(
+            id = exerciseToUpdate.id,
+            name = exerciseName,
+            description = updatedExerciseDescription,
+            link = updatedExerciseLink
+        )
+
+        // act
+        given()
+            .body(updatedExercise)
+            .contentType(ContentType.JSON)
+            .put("/api/exercises")
+            // assert
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+
+        // remove the exercise
+        exerciseService.deleteExercise(exerciseToUpdate.id!!)
+        exerciseService.deleteExercise(existingExercise.id!!)
     }
 
     @Test
