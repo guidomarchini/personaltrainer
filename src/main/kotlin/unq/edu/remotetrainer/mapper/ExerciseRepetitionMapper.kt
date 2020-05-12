@@ -8,21 +8,21 @@ import unq.edu.remotetrainer.persistence.entity.ExerciseRepetitionEntity
 @Component
 class ExerciseRepetitionMapper constructor(
     @Autowired val exerciseMapper: ExerciseMapper
-) {
+): RemoteTrainerMapper<ExerciseRepetition, ExerciseRepetitionEntity> {
 
-    fun toEntity(exerciseRepetition: ExerciseRepetition): ExerciseRepetitionEntity {
+    override fun toEntity(model: ExerciseRepetition): ExerciseRepetitionEntity {
         return ExerciseRepetitionEntity(
-            id = exerciseRepetition.id,
-            exercise = exerciseMapper.toEntity(exerciseRepetition.exercise),
-            quantity = exerciseRepetition.quantity
+            id = model.id,
+            exercise = exerciseMapper.toEntity(model.exercise),
+            quantity = model.quantity
         )
     }
 
-    fun toModel(exerciseRepetitionEntity: ExerciseRepetitionEntity): ExerciseRepetition {
+    override fun toModel(entity: ExerciseRepetitionEntity): ExerciseRepetition {
         return ExerciseRepetition(
-            id = exerciseRepetitionEntity.id,
-            exercise = exerciseMapper.toModel(exerciseRepetitionEntity.exercise),
-            quantity = exerciseRepetitionEntity.quantity
+            id = entity.id,
+            exercise = exerciseMapper.toModel(entity.exercise),
+            quantity = entity.quantity
         )
     }
 

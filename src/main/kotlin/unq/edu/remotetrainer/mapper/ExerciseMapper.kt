@@ -5,23 +5,23 @@ import unq.edu.remotetrainer.model.Exercise
 import unq.edu.remotetrainer.persistence.entity.ExerciseEntity
 
 @Component
-class ExerciseMapper {
+class ExerciseMapper: RemoteTrainerMapper<Exercise, ExerciseEntity> {
 
-    fun toEntity(exercise: Exercise): ExerciseEntity {
+    override fun toEntity(model: Exercise): ExerciseEntity {
         return ExerciseEntity (
-            id = exercise.id,
-            name = exercise.name,
-            description = exercise.description,
-            link = exercise.link
+            id = model.id,
+            name = model.name,
+            description = model.description,
+            link = model.link
         )
     }
 
-    fun toModel(exerciseEntity: ExerciseEntity): Exercise {
+    override fun toModel(entity: ExerciseEntity): Exercise {
         return Exercise(
-            id = exerciseEntity.id,
-            name = exerciseEntity.name,
-            description = exerciseEntity.description,
-            link = exerciseEntity.link
+            id = entity.id,
+            name = entity.name,
+            description = entity.description,
+            link = entity.link
         )
     }
 }

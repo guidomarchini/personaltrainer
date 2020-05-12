@@ -34,8 +34,8 @@ class ExerciseControllerTest(
     @BeforeAll
     fun beforeAll() {
         RestAssured.port = port
-        pullups = exerciseService.createExercise(pullups)
-        pushups = exerciseService.createExercise(pushups)
+        pullups = exerciseService.create(pullups)
+        pushups = exerciseService.create(pushups)
     }
 
     @Test
@@ -47,7 +47,7 @@ class ExerciseControllerTest(
         // assert
             .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize<Exercise>(2))
+            .body("size()", equalTo(2))
             .body("find { it.name == 'pullups' }", notNullValue())
             .body("find { it.name == 'pushups' }", notNullValue())
     }
@@ -92,7 +92,7 @@ class ExerciseControllerTest(
             .path("id")
 
         // remove the exercise
-        exerciseService.deleteExercise(newExerciseId)
+        exerciseService.delete(newExerciseId)
     }
 
     @Test
@@ -101,7 +101,7 @@ class ExerciseControllerTest(
         val exerciseName = "some name"
 
         val existingExercise: Exercise =
-            exerciseService.createExercise(
+            exerciseService.create(
                 Exercise(
                 name = exerciseName,
                 description = "some description"
@@ -126,7 +126,7 @@ class ExerciseControllerTest(
             .statusCode(HttpStatus.BAD_REQUEST.value())
 
         // remove the exercise
-        exerciseService.deleteExercise(existingExercise.id!!)
+        exerciseService.delete(existingExercise.id!!)
     }
 
     @Test
@@ -136,7 +136,7 @@ class ExerciseControllerTest(
         val originalExerciseDescription = "new description"
         val originalExerciseLink = "new link"
         val existingExercise: Exercise =
-            exerciseService.createExercise(
+            exerciseService.create(
                 Exercise(
                     name = originalExerciseName,
                     description = originalExerciseDescription,
@@ -166,7 +166,7 @@ class ExerciseControllerTest(
             .body("link", equalTo(updatedExerciseLink))
 
         // remove the exercise
-        exerciseService.deleteExercise(existingExercise.id!!)
+        exerciseService.delete(existingExercise.id!!)
     }
 
     @Test
@@ -176,7 +176,7 @@ class ExerciseControllerTest(
         val originalExerciseDescription = "new description"
         val originalExerciseLink = "new link"
         val exerciseToUpdate: Exercise =
-            exerciseService.createExercise(
+            exerciseService.create(
                 Exercise(
                     name = originalExerciseName,
                     description = originalExerciseDescription,
@@ -186,7 +186,7 @@ class ExerciseControllerTest(
         val exerciseName = "some name"
 
         val existingExercise: Exercise =
-            exerciseService.createExercise(
+            exerciseService.create(
                 Exercise(
                     name = exerciseName,
                     description = "some description"
@@ -211,8 +211,8 @@ class ExerciseControllerTest(
             .statusCode(HttpStatus.BAD_REQUEST.value())
 
         // remove the exercise
-        exerciseService.deleteExercise(exerciseToUpdate.id!!)
-        exerciseService.deleteExercise(existingExercise.id!!)
+        exerciseService.delete(exerciseToUpdate.id!!)
+        exerciseService.delete(existingExercise.id!!)
     }
 
     @Test

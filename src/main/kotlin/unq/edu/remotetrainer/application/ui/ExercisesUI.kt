@@ -23,7 +23,7 @@ class ExercisesUI constructor(
     @GetMapping("/exercises")
     fun exercises(model: Model): String {
         // TODO sorted by name
-        model["exercises"] = exerciseService.getAllExercises()
+        model["exercises"] = exerciseService.getAll()
 
         return "exercises"
     }
@@ -31,13 +31,13 @@ class ExercisesUI constructor(
     @GetMapping("/trackings")
     fun trackings(model: Model): String {
 
-        val allTrackings: List<Tracking> = trackingService.getAllTrackings()
+        val allTrackings: List<Tracking> = trackingService.getAll()
 
         val trackedExercises: Set<Exercise> =
             allTrackings.mapTo(HashSet(), { it.exercise })
 
         val exercisesNotBeingTracked: List<Exercise> =
-            exerciseService.getAllExercises().filter {
+            exerciseService.getAll().filter {
                 !trackedExercises.contains(it)
         }
 

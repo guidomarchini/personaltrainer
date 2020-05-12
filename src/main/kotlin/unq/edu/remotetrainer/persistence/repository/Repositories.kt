@@ -11,7 +11,9 @@ interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
     fun getExerciseEntitiesByNameIn(names: List<String>): Iterable<ExerciseEntity>
 }
 
-interface ExerciseBlockRepository : CrudRepository<ExerciseBlockEntity, Int>
+interface ExerciseBlockRepository : CrudRepository<ExerciseBlockEntity, Int> {
+    fun getAllByNameNotNull(): Iterable<ExerciseBlockEntity>
+}
 
 interface ExerciseRepetitionRepository : CrudRepository<ExerciseRepetitionEntity, Int>
 

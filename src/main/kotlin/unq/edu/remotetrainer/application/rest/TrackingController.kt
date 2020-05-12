@@ -15,12 +15,12 @@ class TrackingController constructor(
 ){
     @GetMapping("/trackings")
     fun trackings(): List<Tracking> {
-        return trackingService.getAllTrackings()
+        return trackingService.getAll()
     }
 
     @GetMapping("/trackings/{id}")
     fun trackingById(@PathVariable id: Int): Tracking {
-        return trackingService.getTrackingById(id) ?: throw TrackingNotFoundException(id)
+        return trackingService.getById(id) ?: throw TrackingNotFoundException(id)
     }
 
     /**
@@ -43,6 +43,6 @@ class TrackingController constructor(
     @DeleteMapping("/trackings/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteTracking(@RequestParam id: Int): Unit {
-        trackingService.deleteTracking(id)
+        trackingService.delete(id)
     }
 }

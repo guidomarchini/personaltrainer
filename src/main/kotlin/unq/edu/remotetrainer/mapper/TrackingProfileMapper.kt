@@ -7,21 +7,21 @@ import unq.edu.remotetrainer.persistence.entity.TrackingProfileEntity
 @Component
 class TrackingProfileMapper constructor(
     val trackingMapper: TrackingMapper
-) {
+): RemoteTrainerMapper<TrackingProfile, TrackingProfileEntity> {
 
-    fun toEntity(trackingProfile: TrackingProfile): TrackingProfileEntity {
+    override fun toEntity(model: TrackingProfile): TrackingProfileEntity {
         return TrackingProfileEntity(
-            id = trackingProfile.id,
-            name = trackingProfile.name,
-            trackings = trackingProfile.trackings.map { trackingMapper.toEntity(it) }
+            id = model.id,
+            name = model.name,
+            trackings = model.trackings.map { trackingMapper.toEntity(it) }
         )
     }
 
-    fun toModel(trackingProfileEntity: TrackingProfileEntity): TrackingProfile {
+    override fun toModel(entity: TrackingProfileEntity): TrackingProfile {
         return TrackingProfile(
-            id = trackingProfileEntity.id,
-            name = trackingProfileEntity.name,
-            trackings = trackingProfileEntity.trackings.map { trackingMapper.toModel(it) }
+            id = entity.id,
+            name = entity.name,
+            trackings = entity.trackings.map { trackingMapper.toModel(it) }
         )
     }
 }

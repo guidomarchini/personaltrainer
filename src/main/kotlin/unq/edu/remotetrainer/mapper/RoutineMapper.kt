@@ -8,23 +8,23 @@ import unq.edu.remotetrainer.persistence.entity.RoutineEntity
 @Component
 class RoutineMapper constructor(
     @Autowired val exerciseBlockMapper: ExerciseBlockMapper
-) {
+): RemoteTrainerMapper<Routine, RoutineEntity> {
 
-    fun toEntity(routine: Routine): RoutineEntity {
+    override fun toEntity(model: Routine): RoutineEntity {
         return RoutineEntity(
-            id = routine.id,
-            date = routine.date,
-            exerciseBlocks = routine.exerciseBlocks.map { exerciseBlockMapper.toEntity(it) },
-            notes = routine.notes
+            id = model.id,
+            date = model.date,
+            exerciseBlocks = model.exerciseBlocks.map { exerciseBlockMapper.toEntity(it) },
+            notes = model.notes
         )
     }
 
-    fun toModel(routineEntity: RoutineEntity): Routine {
+    override fun toModel(entity: RoutineEntity): Routine {
         return Routine(
-            id = routineEntity.id,
-            date = routineEntity.date,
-            exerciseBlocks = routineEntity.exerciseBlocks.map { exerciseBlockMapper.toModel(it) },
-            notes = routineEntity.notes
+            id = entity.id,
+            date = entity.date,
+            exerciseBlocks = entity.exerciseBlocks.map { exerciseBlockMapper.toModel(it) },
+            notes = entity.notes
         )
     }
 }

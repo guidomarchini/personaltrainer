@@ -9,23 +9,23 @@ import unq.edu.remotetrainer.persistence.entity.TrackingEntity
 class TrackingMapper constructor(
     @Autowired val exerciseTrackingMapper: ExerciseTrackingMapper,
     @Autowired val exerciseMapper: ExerciseMapper
-) {
+): RemoteTrainerMapper<Tracking, TrackingEntity> {
 
-    fun toEntity(tracking: Tracking): TrackingEntity {
+    override fun toEntity(model: Tracking): TrackingEntity {
         return TrackingEntity(
-            id = tracking.id,
-            exercise = exerciseMapper.toEntity(tracking.exercise),
-            exerciseTrackings = tracking.exerciseTrackings.map { exerciseTrackingMapper.toEntity(it) },
-            favourite = tracking.favourite
+            id = model.id,
+            exercise = exerciseMapper.toEntity(model.exercise),
+            exerciseTrackings = model.exerciseTrackings.map { exerciseTrackingMapper.toEntity(it) },
+            favourite = model.favourite
         )
     }
 
-    fun toModel(trackingEntity: TrackingEntity) : Tracking {
+    override fun toModel(entity: TrackingEntity) : Tracking {
         return Tracking(
-            id = trackingEntity.id,
-            exercise = exerciseMapper.toModel(trackingEntity.exercise),
-            exerciseTrackings = trackingEntity.exerciseTrackings.map { exerciseTrackingMapper.toModel(it) },
-            favourite = trackingEntity.favourite
+            id = entity.id,
+            exercise = exerciseMapper.toModel(entity.exercise),
+            exerciseTrackings = entity.exerciseTrackings.map { exerciseTrackingMapper.toModel(it) },
+            favourite = entity.favourite
         )
     }
 }

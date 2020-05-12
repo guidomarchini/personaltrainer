@@ -1,6 +1,7 @@
 package unq.edu.remotetrainer.persistence.repository
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -13,8 +14,14 @@ class ExerciseRepositoryTest @Autowired constructor(
     val entityManager: TestEntityManager,
     val exerciseRepository: ExerciseRepository
 ){
+
+    @AfterAll
+    fun tearDown() {
+        exerciseRepository.deleteAll()
+    }
+
     @Test
-    fun `It creates an Exercise`() {
+    fun `it creates an Exercise`() {
         // arrange
         val pullups: ExerciseEntity = ExerciseEntity(
             name = "Pullups",
@@ -33,11 +40,10 @@ class ExerciseRepositoryTest @Autowired constructor(
     @Test
     fun `it returns a saved Exercise`() {
         // arrange
-        val pullups: ExerciseEntity = ExerciseEntity(
+        val pullups: ExerciseEntity = entityManager.persistAndFlush(ExerciseEntity(
             name = "Pullups",
             description = "They're hard!"
-        )
-        entityManager.persistAndFlush(pullups)
+        ))
 
         // act
         val found = exerciseRepository.findByIdOrNull(pullups.id!!)
@@ -77,15 +83,15 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `The instance is updated`() {
+    fun `it updates the instance`() {
         // arrange
         val oldDescription: String = "They're hard!"
         val newDescription: String = "They're hard, but everything becomes easy with practice!"
-        val pullups: ExerciseEntity = ExerciseEntity(
-            name = "Pullups",
-            description = oldDescription
-        )
-        entityManager.persistAndFlush(pullups)
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "Pullups",
+                description = oldDescription
+            ))
 
         // act
         val found = exerciseRepository.findByIdOrNull(pullups.id!!)
@@ -100,13 +106,13 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `It removes an Exercise`() {
+    fun `it removes an Exercise`() {
         // arrange
-        val pullups: ExerciseEntity = ExerciseEntity(
-            name = "Pullups",
-            description = "They're hard!"
-        )
-        entityManager.persistAndFlush(pullups)
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "Pullups",
+                description = "They're hard!"
+            ))
 
         // act
         exerciseRepository.deleteById(pullups.id!!)
@@ -118,14 +124,14 @@ class ExerciseRepositoryTest @Autowired constructor(
 
     // custom queries
     @Test
-   fun `It gets by name`() {
+   fun `it gets by name`() {
         // arrange
         val name: String = "Pullups"
-        val pullups: ExerciseEntity = ExerciseEntity(
-            name = name,
-            description = "They're hard!"
-        )
-        entityManager.persistAndFlush(pullups)
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = name,
+                description = "They're hard!"
+            ))
 
         // act
         val found = exerciseRepository.getByName(name)
@@ -136,13 +142,13 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `It gets by id`() {
+    fun `it gets by id`() {
         // arrange
-        val pullups: ExerciseEntity = ExerciseEntity(
-            name = "Pullups",
-            description = "They're hard!"
-        )
-        entityManager.persistAndFlush(pullups)
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "Pullups",
+                description = "They're hard!"
+            ))
 
         // act
         val found = exerciseRepository.getById(pullups.id!!)
@@ -153,21 +159,21 @@ class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `It gets all by name`() {
+    fun `it gets all by name`() {
         // arrange
         val pullupsName: String = "Pullups"
-        val pullups: ExerciseEntity = ExerciseEntity(
-            name = pullupsName,
-            description = "They're hard!"
-        )
-        entityManager.persistAndFlush(pullups)
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = pullupsName,
+                description = "They're hard!"
+            ))
 
         val pushupsname: String = "Pushups"
-        val pushups: ExerciseEntity = ExerciseEntity(
-            name = pushupsname,
-            description = "Calisthenics basic"
-        )
-        entityManager.persistAndFlush(pushups)
+        val pushups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = pushupsname,
+                description = "Calisthenics basic"
+            ))
 
         // act
         val found = exerciseRepository.getExerciseEntitiesByNameIn(listOf(pullupsName, pushupsname))

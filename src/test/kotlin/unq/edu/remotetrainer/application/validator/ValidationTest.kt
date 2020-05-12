@@ -37,7 +37,7 @@ class ValidationTest {
     fun `validation of null throws a validation exception`() {
         // act
         val error = assertThrows<ValidationError> {
-            Validation.validateNotNull(null, errorMessage)
+            Validation.validateNotNull<Any>(null, errorMessage)
         }
 
         // assert

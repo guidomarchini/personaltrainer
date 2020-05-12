@@ -19,24 +19,14 @@ import unq.edu.remotetrainer.persistence.repository.TrackingRepository
 
 @Service
 class TrackingService constructor(
-    @Autowired val trackingRepository: TrackingRepository,
-    @Autowired val trackingMapper: TrackingMapper,
+    @Autowired override val repository: TrackingRepository,
+    @Autowired override val mapper: TrackingMapper,
     @Autowired val exerciseTrackingRepository: ExerciseTrackingRepository,
     @Autowired val exerciseTrackingMapper: ExerciseTrackingMapper,
     @Autowired val exerciseRepository: ExerciseRepository
-) {
-    fun createTracking(tracking: Tracking): Tracking {
-        return trackingMapper.toModel(
-            trackingRepository.save(
-                trackingMapper.toEntity(tracking)
-            )
-        )
-    }
+): RemoteTrainerService<Tracking, TrackingEntity> {
 
     fun createEmptyTrackingForExercise(exerciseId: Int): Tracking {
-        // TODO validate exercise not being tracked
-
-
         val exerciseEntity: ExerciseEntity =
             exerciseRepository.findByIdOrNull(exerciseId) ?: throw ExerciseNotFoundException(exerciseId)
 
@@ -46,29 +36,18 @@ class TrackingService constructor(
             favourite = false
         )
 
-        return trackingMapper.toModel(
-            trackingRepository.save(
+        return mapper.toModel(
+            repository.save(
                 newTracking
             )
         )
-    }
-
-    fun getAllTrackings(): List<Tracking> {
-        return trackingRepository.findAll().map {
-            trackingMapper.toModel(it)
-        }
-    }
-
-    fun getTrackingById(id: Int): Tracking? {
-        return trackingRepository.findByIdOrNull(id)
-            ?.let { trackingMapper.toModel(it) }
     }
 
     fun addExercise(
         trackingId: Int,
         exerciseQuantity: Int
     ): Tracking {
-        val tracking: TrackingEntity = trackingRepository.findByIdOrNull(trackingId)?: throw TrackingNotFoundException(trackingId)
+        val tracking: TrackingEntity = repository.findByIdOrNull(trackingId)?: throw TrackingNotFoundException(trackingId)
         val exerciseTracking: ExerciseTracking = ExerciseTracking(
             quantity = exerciseQuantity,
             date = LocalDate.now()
@@ -78,36 +57,32 @@ class TrackingService constructor(
 
         tracking.exerciseTrackings = tracking.exerciseTrackings.plus(exerciseTrackingEntity)
 
-        return trackingMapper.toModel(
-            trackingRepository.save(tracking)
+        return mapper.toModel(
+            repository.save(tracking)
         )
     }
 
     fun toggleFavourite(id: Int): Unit {
         val trackingToUpdate: TrackingEntity =
-            checkNotNull(trackingRepository.findByIdOrNull(id))
+            checkNotNull(repository.findByIdOrNull(id))
 
         trackingToUpdate.favourite = !trackingToUpdate.favourite
 
-        trackingRepository.save(trackingToUpdate)
+        repository.save(trackingToUpdate)
     }
 
     fun updateTracking(tracking: Tracking): Tracking {
         val id: Int = checkNotNull(tracking.id)
         val trackingToUpdate: TrackingEntity =
-            checkNotNull(trackingRepository.findByIdOrNull(id))
+            checkNotNull(repository.findByIdOrNull(id))
 
         trackingToUpdate.exerciseTrackings =
             tracking.exerciseTrackings.map {
                 exerciseTrackingMapper.toEntity(it)
             }
 
-        trackingRepository.save(trackingToUpdate)
+        repository.save(trackingToUpdate)
 
-        return trackingMapper.toModel(trackingToUpdate)
-    }
-
-    fun deleteTracking(id: Int): Unit {
-        trackingRepository.deleteById(id)
+        return mapper.toModel(trackingToUpdate)
     }
 }

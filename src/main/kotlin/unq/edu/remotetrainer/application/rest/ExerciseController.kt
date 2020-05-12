@@ -16,30 +16,30 @@ class ExerciseController constructor(
 
     @GetMapping("/exercises")
     fun exercises(): List<Exercise> {
-        return exerciseService.getAllExercises()
+        return exerciseService.getAll()
     }
 
     @GetMapping("/exercises/{id}")
     fun getExerciseById(@PathVariable id: Int): Exercise {
-        return exerciseService.getExerciseById(id) ?: throw ExerciseNotFoundException(id)
+        return exerciseService.getById(id) ?: throw ExerciseNotFoundException(id)
     }
 
     @PostMapping("/exercises")
     @ResponseStatus(HttpStatus.CREATED)
     fun createExercise(@RequestBody exercise: Exercise): Exercise {
         exerciseValidator.validateForCreate(exercise)
-        return exerciseService.createExercise(exercise)
+        return exerciseService.create(exercise)
     }
 
     @PutMapping("/exercises")
     fun update(@RequestBody exercise: Exercise): Exercise {
         exerciseValidator.validateForUpdate(exercise)
-        return exerciseService.updateExercise(exercise)
+        return exerciseService.update(exercise)
     }
 
     @DeleteMapping("/exercises/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteExercise(@PathVariable id: Int): Unit {
-        exerciseService.deleteExercise(id)
+        exerciseService.delete(id)
     }
 }
