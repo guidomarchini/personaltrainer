@@ -41,14 +41,14 @@ internal class ExerciseServiceTest: AbstractServiceTest<Exercise, ExerciseEntity
     fun `it gets exercises by name`() {
         // arrange
         val name: String = "some exercise"
-        whenever(repository.getAllByName(name))
-            .thenReturn(listOf(entityObject))
+        whenever(repository.getByName(name))
+            .thenReturn(entityObject)
 
         // act
-        val result: List<Exercise> =
-            service.getAllExercisesByname(name)
+        val result: Exercise? =
+            service.getExerciseByName(name)
 
         // assert
-        assertThat(result).contains(modelObject)
+        assertThat(result).isEqualTo(modelObject)
     }
 }

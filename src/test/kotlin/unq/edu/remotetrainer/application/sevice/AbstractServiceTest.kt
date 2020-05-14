@@ -10,6 +10,13 @@ import org.springframework.data.repository.CrudRepository
 import unq.edu.remotetrainer.mapper.RemoteTrainerMapper
 import java.util.*
 
+/**
+ * Abstract Service test.
+ * It contains the basic tests for basic CRUD methods of the services.
+ * Generics:
+ *  * M = Model object.
+ *  * E = Entity object.
+ */
 abstract class AbstractServiceTest<M, E> {
     abstract val mapper: RemoteTrainerMapper<M, E>
     abstract val repository: CrudRepository<E, Int>
