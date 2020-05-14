@@ -4,12 +4,13 @@ import io.restassured.RestAssured
 import io.restassured.RestAssured.*
 import io.restassured.http.ContentType
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import unq.edu.remotetrainer.application.sevice.ExerciseService
@@ -17,7 +18,7 @@ import unq.edu.remotetrainer.model.Exercise
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ExerciseControllerTest(
+internal class ExerciseControllerTest (
     @Autowired val exerciseService: ExerciseService,
     @LocalServerPort val port: Int
 ) {
@@ -38,8 +39,14 @@ class ExerciseControllerTest(
         pushups = exerciseService.create(pushups)
     }
 
+    @AfterAll
+    fun afterAll() {
+        exerciseService.delete(pullups.id!!)
+        exerciseService.delete(pushups.id!!)
+    }
+
     @Test
-    fun `get exercises`(@Autowired restTemplate: TestRestTemplate) {
+    fun `get exercises`() {
         // arrange
 
         // act
@@ -48,12 +55,12 @@ class ExerciseControllerTest(
             .then()
             .statusCode(HttpStatus.OK.value())
             .body("size()", equalTo(2))
-            .body("find { it.name == 'pullups' }", notNullValue())
-            .body("find { it.name == 'pushups' }", notNullValue())
+            .body("find { it.name == '${pullups.name}' }", notNullValue())
+            .body("find { it.name == '${pushups.name}' }", notNullValue())
     }
 
     @Test
-    fun `get exercise by id`(@Autowired restTemplate: TestRestTemplate) {
+    fun `get exercise by id`() {
         // arrange
 
         // act
@@ -66,7 +73,7 @@ class ExerciseControllerTest(
     }
 
     @Test
-    fun `create exercise`(@Autowired restTemplate: TestRestTemplate) {
+    fun `create exercise`() {
         // arrange
         val newExerciseName = "new name"
         val newExerciseDescription = "new description"
@@ -96,7 +103,7 @@ class ExerciseControllerTest(
     }
 
     @Test
-    fun `create exercise with same name as existing one`(@Autowired restTemplate: TestRestTemplate) {
+    fun `create exercise with same name as existing one`() {
         // arrange
         val exerciseName = "some name"
 
@@ -130,7 +137,7 @@ class ExerciseControllerTest(
     }
 
     @Test
-    fun `update exercise`(@Autowired restTemplate: TestRestTemplate) {
+    fun `update exercise`() {
         // arrange
         val originalExerciseName = "new name"
         val originalExerciseDescription = "new description"
@@ -170,7 +177,7 @@ class ExerciseControllerTest(
     }
 
     @Test
-    fun `update exercise with the same name as existing one`(@Autowired restTemplate: TestRestTemplate) {
+    fun `update exercise with the same name as existing one`() {
         // arrange
         val originalExerciseName = "new name"
         val originalExerciseDescription = "new description"
@@ -216,7 +223,7 @@ class ExerciseControllerTest(
     }
 
     @Test
-    fun `delete exercise`(@Autowired restTemplate: TestRestTemplate) {
+    fun `delete exercise`() {
         // arrange
         val newExerciseName = "new name"
         val newExerciseDescription = "new description"
@@ -241,6 +248,6 @@ class ExerciseControllerTest(
             .then()
             .statusCode(HttpStatus.NO_CONTENT.value())
 
-        assertThat(exerciseService.getExerciseById(newExerciseId)).isNull()
+        assertThat(exerciseService.getById(newExerciseId)).isNull()
     }
 }
