@@ -1,12 +1,10 @@
 package unq.edu.remotetrainer.persistence.entity
 
-import javax.persistence.*
+import javax.persistence.Embeddable
+import javax.persistence.ManyToOne
 
-@Entity
+@Embeddable
 class ExerciseRepetitionEntity (
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null,
-
     @ManyToOne
     var exercise: ExerciseEntity,
 

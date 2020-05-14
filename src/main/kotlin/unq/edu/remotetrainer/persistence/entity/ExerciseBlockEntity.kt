@@ -9,8 +9,13 @@ class ExerciseBlockEntity (
 
     var name: String? = null,
 
-    @OneToMany(targetEntity = ExerciseRepetitionEntity::class)
-    var exercises: List<ExerciseRepetitionEntity>,
+    @ElementCollection(targetClass = ExerciseRepetitionEntity::class)
+    @CollectionTable(
+        name = "exercise_repetition_entity",
+        joinColumns = [JoinColumn(name="exercise_block")]
+    )
+    // JPA utilizes .remove, so this list should be mutable
+    var exercises: MutableList<ExerciseRepetitionEntity>,
 
     var notes: String
 )
