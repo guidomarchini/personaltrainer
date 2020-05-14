@@ -8,12 +8,13 @@ import unq.edu.remotetrainer.model.Exercise
 class ExerciseValidator constructor(
     private val exerciseService: ExerciseService
 ){
-    val NAME_ALREADY_EXISTS_MESSAGE: String = "Another exercise with that name exists."
+    private final val NAME_ALREADY_EXISTS_MESSAGE: String = "Another exercise with that name exists."
+    private final val NULL_ID_MESSAGE = "Exercise to update should exist in the database."
 
     fun validateForCreate(exercise: Exercise): Unit {
-        Validation.validate(
-            exerciseService.getAllExercisesByname(exercise.name).isEmpty(),
-            NAME_ALREADY_EXISTS_MESSAGE
+        Validation.validateNull(
+            nullableObject = exerciseService.getExerciseByName(exercise.name),
+            errorMessage = NAME_ALREADY_EXISTS_MESSAGE
         )
     }
 
@@ -21,17 +22,17 @@ class ExerciseValidator constructor(
         // id should not be null
         val id: Int =
             Validation.validateNotNull(
-                exercise.id,
-                "Exercise should exist in the database."
+                nullableObject = exercise.id,
+                errorMessage = NULL_ID_MESSAGE
             )
 
         // name must be unique
-        val exercisesForName: List<Exercise> =
-            exerciseService.getAllExercisesByname(exercise.name)
+        val exercisesWithName: Exercise? =
+            exerciseService.getExerciseByName(exercise.name)
 
         Validation.validate(
-            exercisesForName.all { it.id == id },
-            NAME_ALREADY_EXISTS_MESSAGE
+            condition = exercisesWithName == null || exercisesWithName.id == exercise.id,
+            errorMessage = NAME_ALREADY_EXISTS_MESSAGE
         )
     }
 

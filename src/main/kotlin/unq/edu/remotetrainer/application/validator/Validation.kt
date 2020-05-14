@@ -31,4 +31,17 @@ object Validation {
             return nullableObject
         }
     }
+
+    /**
+     * Validates that the argument is null.
+     * If it is not null, throws a {@link ValidationException}
+     */
+    fun <T> validateNull(
+        nullableObject: T?,
+        errorMessage: String
+    ): Unit {
+        if (nullableObject != null) {
+            throw ValidationError(errorMessage)
+        }
+    }
 }

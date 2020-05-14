@@ -13,14 +13,8 @@ class ExerciseService constructor(
     @Autowired override val mapper: ExerciseMapper
 ): RemoteTrainerService<Exercise, ExerciseEntity> {
 
-    fun getAllExercisesByname(name: String): List<Exercise> {
-        return repository.getAllByName(name).map {
-            mapper.toModel(it)
-        }
-    }
-
-    fun getExerciseById(id: Int): Exercise? {
-        return repository.getById(id)
+    fun getExerciseByName(name: String): Exercise? {
+        return repository.getByName(name)
             ?.let { mapper.toModel(it) }
     }
 }

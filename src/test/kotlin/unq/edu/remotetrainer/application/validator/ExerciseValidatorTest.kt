@@ -29,10 +29,13 @@ class ExerciseValidatorTest {
             description = "some description"
         )
 
-        // act / assert
-        assertThrows<ValidationError> {
+        // act
+        val error = assertThrows<ValidationError> {
             exerciseValidator.validateForUpdate(exercise)
         }
+
+        // assert
+        assertThat(error.message).isEqualTo("Exercise to update should exist in the database.")
     }
 
     @Test
@@ -47,7 +50,7 @@ class ExerciseValidatorTest {
             description = "some description"
         )
 
-        whenever(exerciseServiceMock.getAllExercisesByname(exerciseName)).thenReturn(listOf(existingExercise))
+        whenever(exerciseServiceMock.getExerciseByName(exerciseName)).thenReturn(existingExercise)
 
         val exerciseToUpdate: Exercise = Exercise(
             id = existingExerciseId+1,
@@ -76,7 +79,7 @@ class ExerciseValidatorTest {
             description = "some description"
         )
 
-        whenever(exerciseServiceMock.getAllExercisesByname(exerciseName)).thenReturn(listOf(existingExercise))
+        whenever(exerciseServiceMock.getExerciseByName(exerciseName)).thenReturn(existingExercise)
 
         val exerciseToUpdate: Exercise = Exercise(
             id = existingExerciseId,
@@ -94,7 +97,7 @@ class ExerciseValidatorTest {
     fun `should update the exercise if the name doesn't exist`() {
         // arrange
         val exerciseName: String = "exercise name"
-        whenever(exerciseServiceMock.getAllExercisesByname(exerciseName)).thenReturn(listOf())
+        whenever(exerciseServiceMock.getExerciseByName(exerciseName)).thenReturn(null)
 
         val exerciseToUpdate: Exercise = Exercise(
             id = 0,
@@ -121,10 +124,9 @@ class ExerciseValidatorTest {
             description = "some description"
         )
 
-        whenever(exerciseServiceMock.getAllExercisesByname(exerciseName)).thenReturn(listOf(existingExercise))
+        whenever(exerciseServiceMock.getExerciseByName(exerciseName)).thenReturn(existingExercise)
 
         val newExercise: Exercise = Exercise(
-            id = existingExerciseId+1,
             name = exerciseName,
             description = "another description"
         )
@@ -142,7 +144,7 @@ class ExerciseValidatorTest {
     fun `should create the exercise if the name doesn't exist`() {
         // arrange
         val exerciseName: String = "exercise name"
-        whenever(exerciseServiceMock.getAllExercisesByname(exerciseName)).thenReturn(listOf())
+        whenever(exerciseServiceMock.getExerciseByName(exerciseName)).thenReturn(null)
 
         val newExercise: Exercise = Exercise(
             id = 0,
