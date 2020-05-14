@@ -1,7 +1,6 @@
 package unq.edu.remotetrainer.persistence.repository
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -12,64 +11,17 @@ import unq.edu.remotetrainer.persistence.entity.ExerciseEntity
 import unq.edu.remotetrainer.persistence.entity.ExerciseRepetitionEntity
 
 @DataJpaTest
-class ExerciseBlockRepositoryTest  @Autowired constructor(
-    val entityManager: TestEntityManager,
-    val exerciseBlockRepository: ExerciseBlockRepository
-){
+internal class ExerciseBlockRepositoryTest @Autowired constructor(
+    override val entityManager: TestEntityManager,
+    override val repository: ExerciseBlockRepository,
+    val exerciseRepository: ExerciseRepository // needed to remove the created exercise
+): AbstractRepositoryTest<ExerciseBlockEntity>() {
 
-    @AfterAll
-    fun tearDown() {
-        exerciseBlockRepository.deleteAll()
+    override fun afterEach() {
+        exerciseRepository.deleteAll()
+        repository.deleteAll()
     }
 
-    @Test
-    fun `it creates an exercise block`() {
-        // arrange
-        val exerciseBlock: ExerciseBlockEntity =
-            ExerciseBlockEntity(
-                exercises = listOf(),
-                notes = ""
-            )
-
-        // act
-        val savedInstance: ExerciseBlockEntity =
-            exerciseBlockRepository.save(exerciseBlock)
-
-        // assert
-        assertThat(savedInstance.id).isNotNull()
-    }
-
-    @Test
-    fun `it creates an exercise block with exercise repetitions`() {
-        // arrange
-        val exercise: ExerciseEntity =
-            entityManager.persist(ExerciseEntity(
-                name = "some exercise",
-                description = "some description"
-            ))
-
-        val exerciseRepetition: ExerciseRepetitionEntity =
-            entityManager.persist(ExerciseRepetitionEntity(
-                exercise = exercise,
-                quantity = 1
-            ))
-
-        entityManager.flush()
-
-        val exerciseBlock: ExerciseBlockEntity =
-            ExerciseBlockEntity(
-                exercises = listOf(exerciseRepetition),
-                notes = ""
-            )
-
-        // act
-        val savedInstance: ExerciseBlockEntity =
-            exerciseBlockRepository.save(exerciseBlock)
-
-        // assert
-        assertThat(savedInstance.id).isNotNull()
-        assertThat(savedInstance.exercises.size).isEqualTo(1)
-    }
 
     @Test
     fun `it returns only the blocks with non null names`() {
@@ -77,13 +29,13 @@ class ExerciseBlockRepositoryTest  @Autowired constructor(
         val namedBlock: ExerciseBlockEntity =
             entityManager.persist(ExerciseBlockEntity(
                 name = "this block has to be returned",
-                exercises = listOf(),
+                exercises = mutableListOf(),
                 notes = ""
             ))
 
         val unnamedBlock: ExerciseBlockEntity =
             entityManager.persist(ExerciseBlockEntity(
-                exercises = listOf(),
+                exercises = mutableListOf(),
                 notes = ""
             ))
 
@@ -91,7 +43,7 @@ class ExerciseBlockRepositoryTest  @Autowired constructor(
 
         // act
         val namedBlocks: List<ExerciseBlockEntity> =
-            exerciseBlockRepository.getAllByNameNotNull().toList()
+            repository.getAllByNameNotNull().toList()
 
         // assert
         assertThat(namedBlocks.size).isEqualTo(1)
@@ -103,9 +55,9 @@ class ExerciseBlockRepositoryTest  @Autowired constructor(
     fun `it updates the instance`() {
         // arrange
         val exerciseBlock: ExerciseBlockEntity =
-            entityManager.persist(ExerciseBlockEntity(
+            entityManager.persistAndFlush(ExerciseBlockEntity(
                 name = "some name",
-                exercises = listOf(),
+                exercises = mutableListOf(),
                 notes = ""
             ))
 
@@ -113,15 +65,15 @@ class ExerciseBlockRepositoryTest  @Autowired constructor(
         val updatedNotes: String = "some notes"
 
         // act
-        val found: ExerciseBlockEntity? = exerciseBlockRepository.findByIdOrNull(exerciseBlock.id!!)
+        val found: ExerciseBlockEntity? = repository.findByIdOrNull(exerciseBlock.id!!)
         val nonNullEntity: ExerciseBlockEntity = checkNotNull(found)
 
         nonNullEntity.name = updatedName
         nonNullEntity.notes = updatedNotes
 
-        exerciseBlockRepository.save(nonNullEntity)
+        repository.save(nonNullEntity)
 
-        val updatedEntity: ExerciseBlockEntity? = exerciseBlockRepository.findByIdOrNull(exerciseBlock.id!!)
+        val updatedEntity: ExerciseBlockEntity? = repository.findByIdOrNull(exerciseBlock.id!!)
 
         // assert
         assertThat(updatedEntity).isNotNull()
@@ -131,19 +83,129 @@ class ExerciseBlockRepositoryTest  @Autowired constructor(
     }
 
     @Test
-    fun `it removes an Exercise`() {
+    fun `it updates the instance with a change in repetitions`() {
         // arrange
+        // base exerciseBlock
+        val exercise: ExerciseEntity =
+            entityManager.persist(ExerciseEntity(
+                name = "some exercise",
+                description = "some description"
+            ))
+
+        val exerciseRepetition: ExerciseRepetitionEntity =
+            ExerciseRepetitionEntity(
+                exercise = exercise,
+                quantity = 1
+            )
+
         val exerciseBlock: ExerciseBlockEntity =
             entityManager.persist(ExerciseBlockEntity(
                 name = "some name",
-                exercises = listOf(),
+                exercises = mutableListOf(),
                 notes = ""
             ))
 
+        entityManager.flush()
+
+        // now, the update part
+        exerciseBlock.exercises = mutableListOf(exerciseRepetition)
+
         // act
-        exerciseBlockRepository.deleteById(exerciseBlock.id!!)
+        repository.save(exerciseBlock)
+
+        val updatedEntity: ExerciseBlockEntity? = repository.findByIdOrNull(exerciseBlock.id!!)
 
         // assert
-        assertThat(exerciseBlockRepository.findByIdOrNull(exerciseBlock.id!!)).isNull()
+        assertThat(updatedEntity).isNotNull()
+        updatedEntity!!
+
+        assertThat(updatedEntity.exercises).hasSize(1)
+
+        val firstExercise = updatedEntity.exercises.firstOrNull()
+        assertThat(firstExercise).isNotNull()
+        firstExercise!!
+        assertThat(firstExercise.quantity).isEqualTo(exerciseRepetition.quantity)
+        assertThat(firstExercise.exercise).isEqualTo(exercise)
+    }
+
+    @Test
+    fun `it cascades exercise repetitions`() {
+        // arrange
+        // base exerciseBlock
+        val exercise: ExerciseEntity =
+            entityManager.persist(ExerciseEntity(
+                name = "some exercise",
+                description = "some description"
+            ))
+
+        val exerciseRepetition: ExerciseRepetitionEntity =
+            ExerciseRepetitionEntity(
+                exercise = exercise,
+                quantity = 1
+            )
+
+        val exerciseBlock: ExerciseBlockEntity =
+            entityManager.persist(ExerciseBlockEntity(
+                name = "some name",
+                exercises = mutableListOf(exerciseRepetition),
+                notes = ""
+            ))
+
+        entityManager.flush()
+
+        // now, the update part
+        exerciseRepetition.quantity +=1
+
+        // act
+        repository.save(exerciseBlock)
+
+        val updatedEntity: ExerciseBlockEntity? = repository.findByIdOrNull(exerciseBlock.id!!)
+
+        // assert
+        assertThat(updatedEntity).isNotNull()
+        updatedEntity!!
+
+        assertThat(updatedEntity.exercises).hasSize(1)
+        val firstExercise = updatedEntity.exercises.firstOrNull()
+        assertThat(firstExercise).isNotNull()
+        firstExercise!!
+        assertThat(firstExercise.quantity).isEqualTo(exerciseRepetition.quantity)
+        assertThat(firstExercise.exercise).isEqualTo(exercise)
+    }
+
+
+
+
+    /* ***************** *
+     * INHERITED METHODS *
+     * ***************** */
+    override fun newInstanceAssertions(savedInstance: ExerciseBlockEntity, newInstance: ExerciseBlockEntity) {
+        assertThat(savedInstance.id).isNotNull()
+        assertThat(savedInstance.name).isEqualTo(newInstance.name)
+        assertThat(savedInstance.notes).isEqualTo(newInstance.notes)
+        assertThat(savedInstance.exercises).hasSize(1)
+    }
+
+    override fun id(entity: ExerciseBlockEntity): Int {
+        return entity.id!!
+    }
+
+    override fun sampleEntity(): ExerciseBlockEntity {
+        val exercise: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "some exercise",
+                description = "some description"
+            ))
+
+        val exerciseRepetition: ExerciseRepetitionEntity =
+            ExerciseRepetitionEntity(
+                exercise = exercise,
+                quantity = 1
+            )
+
+        return ExerciseBlockEntity(
+            exercises = mutableListOf(exerciseRepetition),
+            notes = ""
+        )
     }
 }
