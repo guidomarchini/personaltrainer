@@ -12,7 +12,6 @@ class ExerciseRepetitionMapper constructor(
 
     override fun toEntity(model: ExerciseRepetition): ExerciseRepetitionEntity {
         return ExerciseRepetitionEntity(
-            id = model.id,
             exercise = exerciseMapper.toEntity(model.exercise),
             quantity = model.quantity
         )
@@ -20,7 +19,6 @@ class ExerciseRepetitionMapper constructor(
 
     override fun toModel(entity: ExerciseRepetitionEntity): ExerciseRepetition {
         return ExerciseRepetition(
-            id = entity.id,
             exercise = exerciseMapper.toModel(entity.exercise),
             quantity = entity.quantity
         )

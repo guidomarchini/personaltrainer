@@ -15,7 +15,7 @@ class ExerciseBlockMapper constructor(
             id = model.id,
             name = model.name,
             notes = model.notes,
-            exercises = model.exercises.map { exerciseRepetitionMapper.toEntity(it) }
+            exercises = model.exercises.map { exerciseRepetitionMapper.toEntity(it) }.toMutableList()
         )
     }
 
