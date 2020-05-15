@@ -40,6 +40,19 @@
                     }
                 })
             }
+
+            function searchTracking() {
+                const input = $('#tracking-search-input').val().toUpperCase()
+                $('.tracking-container').each(function(index){
+                    const _this = $(this)
+                    const trackingName = _this.find('.tracking-name').text().toUpperCase()
+                    if (trackingName.includes(input)) {
+                        _this.show()
+                    } else {
+                        _this.hide()
+                    }
+                })
+            }
         </script>
     </head>
 
@@ -50,12 +63,20 @@
 
         <main role="main" class="container">
             <h1>Seguimiento de ejercicios</h1>
+            <div class="input-group md-form form-sm form-1 pl-0">
+                <div class="input-group-prepend">
+                            <span class="input-group-text cyan lighten-2" id="basic-text1">
+                                <i class="fas fa-search text-white" aria-hidden="true"></i>
+                            </span>
+                </div>
+                <input id="tracking-search-input" class="form-control my-0 py-1" type="text" onkeyup="searchTracking()" placeholder="Buscar..." aria-label="Search" />
+            </div>
             <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#tracking-create-modal">Seguir un nuevo ejercicio</button>
 
             <div class="container pt-3">
                 {{#trackings}}
-                <div class="container">
-                    <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="tracking-name-{{id}}" data-target="#div-{{id}}">{{exercise.name}}</a>
+                <div class="container tracking-container">
+                    <a href="#" class="container-sm btn btn-dark tracking-name" role="button" data-toggle="collapse" id="tracking-name-{{id}}" data-target="#div-{{id}}">{{exercise.name}}</a>
                     <div id="div-{{id}}" class="collapse pb-3">
                         <div class="container pb-2">
                             <table class="table table-stripped">
