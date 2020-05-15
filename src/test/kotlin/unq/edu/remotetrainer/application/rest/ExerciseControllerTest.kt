@@ -23,20 +23,20 @@ internal class ExerciseControllerTest (
     @LocalServerPort val port: Int
 ) {
 
-    var pullups = Exercise(
-        name = "pullups",
-        description = "they're hard!"
-    )
-    var pushups = Exercise(
-        name = "pushups",
-        description = "you can start with these ones!"
-    )
+    var pullups: Exercise = exerciseService.create(
+        Exercise(
+            name = "pullups",
+            description = "they're hard!"
+        ))
+    var pushups: Exercise = exerciseService.create(
+        Exercise(
+            name = "pushups",
+            description = "you can start with these ones!"
+        ))
 
     @BeforeAll
     fun beforeAll() {
         RestAssured.port = port
-        pullups = exerciseService.create(pullups)
-        pushups = exerciseService.create(pushups)
     }
 
     @AfterAll

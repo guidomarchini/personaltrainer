@@ -2,7 +2,6 @@ package unq.edu.remotetrainer.persistence.repository
 
 import org.springframework.data.repository.CrudRepository
 import unq.edu.remotetrainer.persistence.entity.*
-import java.util.*
 
 interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
     fun getByName(name: String): ExerciseEntity?
