@@ -51,7 +51,7 @@ class TrackingController constructor(
 
     @DeleteMapping("/trackings/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteTracking(@RequestParam id: Int): Unit {
+    fun deleteTracking(@PathVariable id: Int): Unit {
         logger.info("Deleting Tracking with id: $id")
         trackingService.delete(id)
     }
