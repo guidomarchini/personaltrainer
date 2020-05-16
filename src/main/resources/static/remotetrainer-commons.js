@@ -5,3 +5,7 @@ function onError(response) {
         $('#error-toast').toast('show')
     })
 }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
