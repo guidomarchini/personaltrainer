@@ -349,9 +349,6 @@
                 if(response.ok) {
                     response.json().then(data => {
                         exercises = data
-                        data.forEach(function(exercise){
-                            $(`.exercise-${exercise.id}`).data(exercise)
-                        })
                     })
                 } else {
                     onError(response)
