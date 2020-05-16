@@ -15,8 +15,7 @@ class TrackingMapper constructor(
         return TrackingEntity(
             id = model.id,
             exercise = exerciseMapper.toEntity(model.exercise),
-            exerciseTrackings = model.exerciseTrackings.map { exerciseTrackingMapper.toEntity(it) },
-            favourite = model.favourite
+            exerciseTrackings = model.exerciseTrackings.map { exerciseTrackingMapper.toEntity(it) }
         )
     }
 
@@ -24,8 +23,7 @@ class TrackingMapper constructor(
         return Tracking(
             id = entity.id,
             exercise = exerciseMapper.toModel(entity.exercise),
-            exerciseTrackings = entity.exerciseTrackings.map { exerciseTrackingMapper.toModel(it) },
-            favourite = entity.favourite
+            exerciseTrackings = entity.exerciseTrackings.map { exerciseTrackingMapper.toModel(it) }
         )
     }
 }

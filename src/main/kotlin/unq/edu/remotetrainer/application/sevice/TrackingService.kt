@@ -32,8 +32,7 @@ class TrackingService constructor(
 
         val newTracking: TrackingEntity = TrackingEntity(
             exercise = exerciseEntity,
-            exerciseTrackings = listOf(),
-            favourite = false
+            exerciseTrackings = listOf()
         )
 
         return mapper.toModel(
@@ -60,15 +59,6 @@ class TrackingService constructor(
         return mapper.toModel(
             repository.save(tracking)
         )
-    }
-
-    fun toggleFavourite(id: Int): Unit {
-        val trackingToUpdate: TrackingEntity =
-            checkNotNull(repository.findByIdOrNull(id))
-
-        trackingToUpdate.favourite = !trackingToUpdate.favourite
-
-        repository.save(trackingToUpdate)
     }
 
     fun updateTracking(tracking: Tracking): Tracking {

@@ -7,6 +7,5 @@ package unq.edu.remotetrainer.model
 data class Tracking (
         val id: Int? = null,
         val exercise: Exercise,
-        val exerciseTrackings: List<ExerciseTracking>,
-        val favourite: Boolean
+        val exerciseTrackings: List<ExerciseTracking>
 )

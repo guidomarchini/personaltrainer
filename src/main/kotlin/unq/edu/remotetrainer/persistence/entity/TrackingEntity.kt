@@ -11,7 +11,5 @@ class TrackingEntity (
     var exercise: ExerciseEntity,
 
     @OneToMany(targetEntity = ExerciseTrackingEntity::class)
-    var exerciseTrackings: List<ExerciseTrackingEntity>,
-
-    var favourite: Boolean
+    var exerciseTrackings: List<ExerciseTrackingEntity>
 )
