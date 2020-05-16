@@ -3,6 +3,18 @@
         {{> common/common-libraries}}
 
         <script>
+            function deleteTracking(id) {
+                fetch(`api/trackings/${id}`, {
+                    method: 'DELETE'
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        onError(response)
+                    }
+                })
+            }
+
             function createTracking() {
                 const body = $('#tracking-create-exercise :selected').val();
                 fetch('api/trackings', {
@@ -97,6 +109,7 @@
 
                         <div class="text-right">
                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tracking-add-modal" data-id="{{id}}">Agregar seguimiento</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tracking-delete-modal" data-id="{{id}}">Eliminar</button>
                         </div>
 
                     </div>
@@ -165,11 +178,44 @@
             </div>
         </div>
 
+        <!-- DELETE popup -->
+        <div class="modal fade" id="tracking-delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tracking-delete-title">Borrar Seguimiento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="tracking-delete-content">
+                            <label for="tracking-delete-name">Esta seguro de que quiere eliminar </label>
+                            <p id="tracking-delete-name">&times;</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark" id="tracking-delete-button">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
 
         <script>
             // following doesn't work even with document.onload
+
+            $('#tracking-delete-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#tracking-delete-name').text($(`#tracking-name-${id}`).text())
+                modal.find('#tracking-delete-button').click(function() {deleteTracking(id)})
+            })
 
             // Modal on show
             $('#tracking-add-modal').on('show.bs.modal', function (event) {
