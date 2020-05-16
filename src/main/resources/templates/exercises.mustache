@@ -11,7 +11,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        console.log(response.body)
+                        onError(response)
                     }
                 })
             }
@@ -33,7 +33,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        console.log(response.body)
+                        onError(response)
                     }
                 })
             }
@@ -56,7 +56,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        console.log(response.body)
+                        onError(response)
                     }
                 })
             }
