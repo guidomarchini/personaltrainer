@@ -1,0 +1,362 @@
+<html>
+    <head>
+        {{> common/common-libraries}}
+
+        <script>
+            // api calls
+            function deleteBlock(id) {
+                fetch(`api/blocks/${id}`, {
+                    method: 'DELETE'
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        onError(response)
+                    }
+                })
+            }
+
+            function createBlock() {
+                const newExercises = []
+
+                $('#block-create-exercises tr').each(function() { // map doesn't work with json
+                    newExercises.push({
+                        "exercise": $(this).find('.block-create-exercise :selected').data(),
+                        "quantity": $(this).find('.block-create-quantity').val()
+                    })
+                })
+
+                const body = {
+                    "name": $('#block-create-name').val(),
+                    "notes": $('#block-create-notes').val(),
+                    "exercises": newExercises
+                }
+
+                fetch('api/blocks', {
+                    method: 'POST',
+                    body: JSON.stringify(body),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        onError(response)
+                    }
+                })
+            }
+
+            function editBlock(id) {
+                const updatedExercises = []
+
+                $('#block-edit-exercises tr').each(function() {
+                    updatedExercises.push({
+                        "exercise": $(this).find('.block-edit-exercise :selected').data(),
+                        "quantity": $(this).find('.block-edit-quantity').val()
+                    })
+                })
+
+                const body = {
+                    "id": id,
+                    "name": $('#block-edit-name').val(),
+                    "notes": $('#block-edit-notes').val(),
+                    "exercises": updatedExercises
+                }
+
+                fetch('api/blocks', {
+                    method: 'PUT',
+                    body: JSON.stringify(body),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        onError(response)
+                    }
+                })
+            }
+
+            function searchBlock() {
+                const input = $('#block-search-input').val().toUpperCase()
+                $('.block-container').each(function(index){
+                    const _this = $(this)
+                    const blockName = _this.find('.block-name').text().toUpperCase()
+                    if (blockName.includes(input)) {
+                        _this.show()
+                    } else {
+                        _this.hide()
+                    }
+                })
+            }
+
+            function addExercise(operation) {
+                const select = document.createElement('select')
+                select.setAttribute('class', `block-${operation}-exercise`)
+                exercises.forEach(function(exercise){
+                    const option = document.createElement('option')
+                    $(option).data(exercise)
+                    option.innerText = exercise.name
+                    select.appendChild(option)
+                })
+
+                const tr = document.createElement('tr')
+
+                const exerciseTh = document.createElement('th')
+                exerciseTh.setAttribute('scope', 'col')
+                exerciseTh.appendChild(select)
+                tr.appendChild(exerciseTh)
+
+                const quantityTh = document.createElement('th')
+                quantityTh.setAttribute('scope', 'col')
+                const quantityInput = document.createElement('input')
+                quantityInput.setAttribute('class', `block-${operation}-quantity`)
+                quantityTh.appendChild(quantityInput)
+                tr.appendChild(quantityTh)
+
+                const removeTh = document.createElement('th')
+                removeTh.setAttribute('scope', 'col')
+                const removeBtn = document.createElement('button')
+                removeBtn.setAttribute('type', 'button')
+                removeBtn.setAttribute('class', 'btn btn-dark')
+                removeBtn.innerText = 'X'
+                removeTh.appendChild(removeBtn)
+                tr.appendChild(removeTh)
+
+                document.getElementById(`block-${operation}-exercises`).appendChild(tr)
+                $(removeTh).find("button").click(function(){
+                    document.getElementById(`block-${operation}-exercises`).removeChild(tr)
+                })
+
+                return tr
+            }
+        </script>
+    </head>
+
+
+    <body class="bg-light">
+        {{> common/navigation}}
+        {{> common/errors}}
+
+        <main role="main" class="container">
+            <h1>Bloques de ejercicio</h1>
+            <div class="input-group md-form form-sm form-1 pl-0">
+                <div class="input-group-prepend">
+                            <span class="input-group-text cyan lighten-2" id="basic-text1">
+                                <i class="fas fa-search text-white" aria-hidden="true"></i>
+                            </span>
+                </div>
+                <input id="block-search-input" class="form-control my-0 py-1" type="text" onkeyup="searchBlock()" placeholder="Buscar..." aria-label="Search" />
+            </div>
+            <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#block-create-modal">Crear nuevo bloque de entrenamiento</button>
+
+            <div class="container pt-3">
+                {{#blocks}}
+                <div class="container block-container">
+                    <a href="#" class="container-sm btn btn-dark block-name" role="button" data-toggle="collapse" id="block-name-{{id}}" data-target="#collapsable-{{id}}">{{name}}</a>
+                    <div id="collapsable-{{id}}" class="collapse pb-3">
+                        <p class="list-group-item lead" id="block-notes-{{id}}">{{notes}}</p>
+                        <div class="container pb-2">
+                            <table class="table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ejercicio</th>
+                                        <th scope="col">Repeticiones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {{#exercises}}
+                                    <tr class="block-repetitions-{{id}}">
+                                        <td class="repetition-exercise">{{exercise.name}}</td>
+                                        <td class="repetition-quantity">{{quantity}}</td>
+                                    </tr>
+                                {{/exercises}}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-edit-modal" data-id="{{id}}">Editar</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-delete-modal" data-id="{{id}}">Eliminar</button>
+                        </div>
+
+                    </div>
+                </div>
+                {{/blocks}}
+            </div>
+        </main>
+
+
+        <!-- Create popup -->
+        <div class="modal fade" id="block-create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="block-create-title">Crear nuevo bloque de ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="block-create-content">
+                            <div>
+                                <label for="block-create-name">Nombre: </label>
+                                <input class="form-control" name="name" id="block-create-name"/>
+                            </div>
+                            <div>
+                                <label for="block-create-notes">Notas:</label>
+                                <textarea class="form-control" name="description" id="block-create-notes"></textarea>
+                            </div>
+
+                            <table class="table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ejercicio</th>
+                                        <th scope="col">Repeticiones</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="block-create-exercises">
+                                </tbody>
+                            </table>
+
+                            <button type="button" class="btn btn-dark btn-sm float-right" onclick="addExercise('create')">Agregar ejercicio</button>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark" onclick="createBlock()">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit popup -->
+        <div class="modal fade" id="block-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="block-edit-title">Editar ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="block-edit-content">
+                            <div>
+                                <label for="block-edit-name">Nombre: </label>
+                                <input class="form-control" name="name" id="block-edit-name"/>
+                            </div>
+                            <div>
+                                <label for="block-edit-notes">Notas:</label>
+                                <textarea class="form-control" name="description" id="block-edit-notes"></textarea>
+                            </div>
+                            <table class="table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ejercicio</th>
+                                        <th scope="col">Repeticiones</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="block-edit-exercises">
+                                </tbody>
+                            </table>
+
+                            <button type="button" class="btn btn-dark btn-sm float-right" onclick="addExercise('edit')">Agregar ejercicio</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark" id="block-edit-button">Editar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DELETE popup -->
+        <div class="modal fade" id="block-delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="block-delete-title">Borrar ejercicio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="block-delete-content">
+                            <label>Esta seguro de que quiere eliminar </label>
+                            <p id="block-delete-name">&times;</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark" id="block-delete-button">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            // following doesn't work even with document.onload
+
+            // Modal on show
+            $('#block-edit-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#block-edit-name').val($(`#block-name-${id}`).text())
+                modal.find('#block-edit-notes').val($(`#block-notes-${id}`).text())
+                modal.find('#block-edit-exercises').html('')
+
+                $(`.block-repetitions-${id}`).each(function() {
+                    const exercise = $(this).find('.repetition-exercise').text()
+                    const quantity = $(this).find('.repetition-quantity').text()
+
+                    const tr = $(addExercise('edit'))
+                    tr.find('.block-edit-exercise').val(exercise)
+                    tr.find(`.block-edit-quantity`).val(quantity)
+                })
+
+                // modal.find('#block-edit-link').val($(`#block-link-${id}`).attr("href"))
+                modal.find('#block-edit-button').click(function() {editBlock(id)})
+            })
+
+            $('#block-delete-modal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget)
+                const id = button.data('id')
+
+                const modal = $(this)
+                modal.find('#block-delete-name').text($(`#block-name-${id}`).text())
+                modal.find('#block-delete-button').click(function() {deleteBlock(id)})
+            })
+
+            $('#nav-block').addClass('active')
+
+            let exercises
+
+            fetch('api/exercises', {
+                method: 'GET'
+            }).then(function(response) {
+                if(response.ok) {
+                    response.json().then(data => {
+                        exercises = data
+                        data.forEach(function(exercise){
+                            $(`.exercise-${exercise.id}`).data(exercise)
+                        })
+                    })
+                } else {
+                    onError(response)
+                }
+            })
+        </script>
+    </body>
+
+
+</html>
