@@ -17,10 +17,15 @@
             }
 
             function createExercise() {
+                let link = null
+                if ($('#exercise-create-link').val() != "") {
+                    link = $('#exercise-create-link').val()
+                }
+
                 const body = {
                     "name": $('#exercise-create-name').val(),
                     "description": $('#exercise-create-description').val(),
-                    "link": $('#exercise-create-link').val()
+                    "link": link
                 }
 
                 fetch('api/exercises', {
@@ -39,11 +44,16 @@
             }
 
             function editExercise(id) {
+                let link = null
+                if ($('#exercise-create-link').val() != "") {
+                    link = $('#exercise-create-link').val()
+                }
+
                 const body = {
                     "id": id,
                     "name": $('#exercise-edit-name').val(),
                     "description": $('#exercise-edit-description').val(),
-                    "link": $('#exercise-edit-link').val()
+                    "link": link
                 }
 
                 fetch('api/exercises', {
