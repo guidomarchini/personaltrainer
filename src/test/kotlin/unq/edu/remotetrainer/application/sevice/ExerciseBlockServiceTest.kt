@@ -1,11 +1,9 @@
 package unq.edu.remotetrainer.application.sevice
 
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import unq.edu.remotetrainer.mapper.ExerciseBlockMapper
 import unq.edu.remotetrainer.model.ExerciseBlock
@@ -30,15 +28,6 @@ internal class ExerciseBlockServiceTest: AbstractServiceTest<ExerciseBlock, Exer
             repository = repository,
             mapper = mapper
         )
-
-    @AfterEach
-    fun after() {
-        reset(
-            entityObject,
-            repository,
-            mapper
-        )
-    }
 
 
     @Test

@@ -18,12 +18,12 @@ import unq.edu.remotetrainer.persistence.repository.ExerciseTrackingRepository
 import unq.edu.remotetrainer.persistence.repository.TrackingRepository
 
 @Service
-class TrackingService constructor(
-    @Autowired override val repository: TrackingRepository,
-    @Autowired override val mapper: TrackingMapper,
-    @Autowired val exerciseTrackingRepository: ExerciseTrackingRepository,
-    @Autowired val exerciseTrackingMapper: ExerciseTrackingMapper,
-    @Autowired val exerciseRepository: ExerciseRepository
+class TrackingService @Autowired constructor(
+    override val repository: TrackingRepository,
+    override val mapper: TrackingMapper,
+    val exerciseTrackingRepository: ExerciseTrackingRepository,
+    val exerciseTrackingMapper: ExerciseTrackingMapper,
+    val exerciseRepository: ExerciseRepository
 ): RemoteTrainerService<Tracking, TrackingEntity> {
 
     fun createEmptyTrackingForExercise(exerciseId: Int): Tracking {

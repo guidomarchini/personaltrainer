@@ -11,7 +11,7 @@ class RoutineEntity (
     var date: LocalDate,
 
     @OneToMany(targetEntity = ExerciseBlockEntity::class)
-    var exerciseBlocks: List<ExerciseBlockEntity>,
+    var exerciseBlocks: MutableList<ExerciseBlockEntity>,
 
     var notes: String
 )

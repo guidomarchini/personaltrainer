@@ -8,9 +8,9 @@ import unq.edu.remotetrainer.persistence.entity.ExerciseEntity
 import unq.edu.remotetrainer.persistence.repository.ExerciseRepository
 
 @Service
-class ExerciseService constructor(
-    @Autowired override val repository: ExerciseRepository,
-    @Autowired override val mapper: ExerciseMapper
+class ExerciseService @Autowired constructor(
+    override val repository: ExerciseRepository,
+    override val mapper: ExerciseMapper
 ): RemoteTrainerService<Exercise, ExerciseEntity> {
 
     fun getExerciseByName(name: String): Exercise? {

@@ -1,8 +1,10 @@
 package unq.edu.remotetrainer.application.sevice
 
+import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,6 +32,15 @@ abstract class AbstractServiceTest<M, E> {
     fun before() {
         whenever(mapper.toEntity(modelObject)).thenReturn(entityObject)
         whenever(mapper.toModel(entityObject)).thenReturn(modelObject)
+    }
+
+    @AfterEach
+    fun after() {
+        reset(
+            entityObject,
+            repository,
+            mapper
+        )
     }
 
 

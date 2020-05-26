@@ -8,9 +8,9 @@ import unq.edu.remotetrainer.persistence.entity.ExerciseBlockEntity
 import unq.edu.remotetrainer.persistence.repository.ExerciseBlockRepository
 
 @Service
-class ExerciseBlockService constructor(
-    @Autowired override val repository: ExerciseBlockRepository,
-    @Autowired override val mapper: ExerciseBlockMapper
+class ExerciseBlockService @Autowired constructor(
+    override val repository: ExerciseBlockRepository,
+    override val mapper: ExerciseBlockMapper
 ): RemoteTrainerService<ExerciseBlock, ExerciseBlockEntity> {
 
     fun getAllNamedBlocks(): List<ExerciseBlock> {

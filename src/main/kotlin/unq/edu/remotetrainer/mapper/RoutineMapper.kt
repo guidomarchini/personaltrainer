@@ -14,7 +14,7 @@ class RoutineMapper constructor(
         return RoutineEntity(
             id = model.id,
             date = model.date,
-            exerciseBlocks = model.exerciseBlocks.map { exerciseBlockMapper.toEntity(it) },
+            exerciseBlocks = model.exerciseBlocks.map { exerciseBlockMapper.toEntity(it) }.toMutableList(),
             notes = model.notes
         )
     }

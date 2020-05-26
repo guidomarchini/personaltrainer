@@ -1,5 +1,6 @@
 package unq.edu.remotetrainer.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import org.joda.time.LocalDate
 
 /**
@@ -8,7 +9,7 @@ import org.joda.time.LocalDate
  * Additional notes can be added at this level.
  */
 data class Routine (
-    val id: Int?,
+    val id: Int? = null,
     val date: LocalDate,
     val exerciseBlocks: List<ExerciseBlock>,
     val notes: String

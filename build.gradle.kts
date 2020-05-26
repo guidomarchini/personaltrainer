@@ -41,8 +41,11 @@ dependencies {
 	// joda time
 	implementation("joda-time:joda-time:2.10.5")
 
-	// persistence
+	// serialization
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.2")
+
+	// persistence
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
 
