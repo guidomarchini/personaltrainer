@@ -1,5 +1,6 @@
 package unq.edu.remotetrainer.application.rest
 
+import org.joda.time.LocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -20,10 +21,23 @@ class RoutineController constructor(
         private val logger: Logger = LoggerFactory.getLogger(javaClass.enclosingClass)
     }
 
+    /**
+     * Fetches routines.
+     * If starting date AND ending date is passed as arguments,
+     * then only the routines for that date range are returned (both dates included).
+     */
     @GetMapping("/routines")
-    fun routines(): List<Routine> {
-        logger.info("Fetching routines")
-        return routineService.getAll()
+    fun routinesByWeek(
+        @RequestParam startingDate: LocalDate?,
+        @RequestParam endingDate: LocalDate?
+    ): Iterable<Routine> {
+        return if (startingDate != null && endingDate != null) {
+            logger.info("Fetching routines from: [$startingDate] to: [$endingDate]")
+            routineService.getRoutines(startingDate, endingDate)
+        } else {
+            logger.info("Fetching all routines")
+            routineService.getAll()
+        }
     }
 
     @GetMapping("/routines/{id}")

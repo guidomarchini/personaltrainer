@@ -61,6 +61,60 @@ internal class RoutineRepositoryTest @Autowired constructor(
         assertThat(updatedEntity.exerciseBlocks.find { it.id == exerciseBlockEntity.id }).isNotNull
     }
 
+    @Test
+    fun `test get routines between two dates`() {
+        // arrange
+        val dateNow: LocalDate = LocalDate()
+        val daysAhead: Int = 6
+
+        entityManager.persist(RoutineEntity(
+            date = dateNow.minusDays(1),
+            shortDescription = "past routine shouldnt be returned",
+            notes = "",
+            exerciseBlocks = mutableListOf()
+        ))
+
+        // create a week of routines
+        val weekRoutines: List<RoutineEntity> =
+            (0..daysAhead).map { plusDays ->
+                entityManager.persist(RoutineEntity(
+                    date = dateNow.plusDays(plusDays),
+                    shortDescription = "routine of the same week should appear",
+                    notes = "",
+                    exerciseBlocks = mutableListOf()
+                ))
+            }
+        
+        entityManager.persist(RoutineEntity(
+            date = dateNow.plusDays(daysAhead + 1),
+            shortDescription = "next week routine shouldn't be returned",
+            notes = "",
+            exerciseBlocks = mutableListOf()
+        ))
+
+        entityManager.persist(RoutineEntity(
+            date = dateNow.plusMonths(1),
+            shortDescription = "next month routine shouldn't be returned",
+            notes = "",
+            exerciseBlocks = mutableListOf()
+        ))
+
+        entityManager.flush()
+
+        // act
+        val result: List<RoutineEntity> =
+            repository.getAllByDateBetween(dateNow, dateNow.plusDays(daysAhead))
+                .toList()
+
+        // assert
+        assertThat(result).hasSize(weekRoutines.size)
+        assert(
+            weekRoutines.all { routine ->
+                result.contains(routine)
+            }
+        )
+    }
+
     /* ***************** *
      * INHERITED METHODS *
      * ***************** */
@@ -84,6 +138,7 @@ internal class RoutineRepositoryTest @Autowired constructor(
 
         return RoutineEntity(
             date = LocalDate(),
+            shortDescription = "test routine",
             notes = "just some sample notes",
             exerciseBlocks = mutableListOf(exerciseBlock)
         )

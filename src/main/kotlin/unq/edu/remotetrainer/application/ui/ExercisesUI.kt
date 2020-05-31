@@ -6,6 +6,7 @@ import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import unq.edu.remotetrainer.application.sevice.ExerciseBlockService
 import unq.edu.remotetrainer.application.sevice.ExerciseService
+import unq.edu.remotetrainer.application.sevice.RoutineService
 import unq.edu.remotetrainer.application.sevice.TrackingService
 import unq.edu.remotetrainer.model.Exercise
 import unq.edu.remotetrainer.model.Tracking
@@ -14,7 +15,8 @@ import unq.edu.remotetrainer.model.Tracking
 class ExercisesUI constructor(
     val exerciseService: ExerciseService,
     val trackingService: TrackingService,
-    val exerciseBlockService: ExerciseBlockService
+    val exerciseBlockService: ExerciseBlockService,
+    val routineService: RoutineService
 ) {
 
     @GetMapping("")
@@ -43,8 +45,8 @@ class ExercisesUI constructor(
                 !trackedExercises.contains(it)
         }
 
-        // TODO sorted by favourite, then name
-        // TODO add weight
+        // TODO sorted by name
+        // TODO add weight as static
         model["trackings"] = allTrackings
         model["exercises"] = exercisesNotBeingTracked
 
@@ -56,5 +58,12 @@ class ExercisesUI constructor(
         model["blocks"] = exerciseBlockService.getAllNamedBlocks()
 
         return "blocks"
+    }
+
+    @GetMapping("/routines")
+    fun routines(model: Model): String {
+        model["routines"] = routineService.getAll()
+
+        return "routines"
     }
 }

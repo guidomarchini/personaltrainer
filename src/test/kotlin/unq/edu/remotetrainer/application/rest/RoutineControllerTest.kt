@@ -30,6 +30,7 @@ internal class RoutineControllerTest (
     val routine: Routine = routineService.create(
         Routine(
             date = LocalDate(),
+            shortDescription = "test routine",
             exerciseBlocks = listOf(),
             notes = "example block"
         )
@@ -78,6 +79,7 @@ internal class RoutineControllerTest (
         val newRoutine: Routine =
             Routine(
                 date = routineDate,
+                shortDescription = "test routine",
                 exerciseBlocks = listOf(),
                 notes = routineNotes
             )
@@ -109,6 +111,7 @@ internal class RoutineControllerTest (
         val routineDate = LocalDate()
         val newRoutine: Routine = routineService.create(Routine(
             date = routineDate,
+            shortDescription = "test routine",
             exerciseBlocks = listOf(),
             notes = routineNotes
         ))
@@ -126,6 +129,7 @@ internal class RoutineControllerTest (
             Routine(
                 id = newRoutine.id,
                 date = updatedDate,
+                shortDescription = "test routine",
                 exerciseBlocks = listOf(exerciseBlock),
                 notes = updatedNotes
             )
@@ -155,6 +159,7 @@ internal class RoutineControllerTest (
         val notCreatedRoutine: Routine =
             Routine(
                 date = LocalDate(),
+                shortDescription = "test routine",
                 exerciseBlocks = listOf(),
                 notes = "this will return a bad request"
             )
@@ -176,6 +181,7 @@ internal class RoutineControllerTest (
         val routineDate = LocalDate()
         val newRoutine: Routine = routineService.create(Routine(
             date = routineDate,
+            shortDescription = "test routine",
             exerciseBlocks = listOf(),
             notes = routineNotes
         ))

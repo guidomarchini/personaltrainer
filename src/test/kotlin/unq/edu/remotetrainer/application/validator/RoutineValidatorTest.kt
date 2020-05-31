@@ -16,6 +16,7 @@ internal class RoutineValidatorTest {
         val routine: Routine =
             Routine(
                 date = LocalDate(),
+                shortDescription = "test routine",
                 notes = "",
                 exerciseBlocks = listOf()
             )
@@ -35,6 +36,7 @@ internal class RoutineValidatorTest {
             Routine(
                 id = 1,
                 date = LocalDate(),
+                shortDescription = "test routine",
                 notes = "",
                 exerciseBlocks = listOf()
             )

@@ -1,0 +1,186 @@
+<html>
+<head>
+    {{> common/common-libraries}}
+
+    <style>
+        .day-column {
+            border: 1px solid;
+            float: left;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .day-column button {
+            width: 100%;
+        }
+
+        .day-name {
+            text-align: center;
+        }
+
+        .number-in-month {
+            font-size: xx-large;
+            text-align: center;
+        }
+
+        .routines {
+            padding-top: 20px;
+        }
+
+        .block-notes {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    </style>
+
+</head>
+
+
+<body class="bg-light">
+{{> common/navigation}}
+{{> common/errors}}
+
+<main role="main" class="container-fluid h-100">
+    <h1 class="float-left">Rutinas</h1>
+    <a href="#" data-toggle="tooltip" title="Arma las rutinas de ejercicios para hacer en una fecha dada.">?</a>
+
+    <div class="container-fluid float-left">
+        <div class="row h-100">
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Lunes</div>
+                <div class="number-in-month">1</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Martes</div>
+                <div class="number-in-month">2</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Miercoles</div>
+                <div class="number-in-month">3</div> <!-- to be added dynamically -->
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid"> <!-- to be added dynamically -->
+                    <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="routine-id-id" data-target="#collapsable-id">Routine short description</a>
+                    <div id="collapsable-id" class="collapse pb-3">
+                        <div class="container-fluid">Routine Notes</div>
+                        <div class="routine-blocks">
+                            <!-- blocks.foreach -->
+                            <p class="list-group-item lead block-notes" id="block-notes-id">A block notes</p>
+                            <div class="container pb-2">
+                                <table class="table table-stripped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Ejercicio</th>
+                                        <th scope="col">Repeticiones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- exercises.foreach -->
+                                    <tr class="block-repetitions-id">
+                                        <td class="repetition-exercise">Sentadillas</td>
+                                        <td class="repetition-quantity">20</td>
+                                    </tr>
+
+                                    <tr class="block-repetitions-id">
+                                        <td class="repetition-exercise">flexiones</td>
+                                        <td class="repetition-quantity">20</td>
+                                    </tr>
+                                    <!-- end exercises.foreach -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="list-group-item lead" id="block-notes-id2">Second block notes</p>
+                            <div class="container pb-2">
+                                <table class="table table-stripped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Ejercicio</th>
+                                        <th scope="col">Repeticiones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- exercises.foreach -->
+                                    <tr class="block-repetitions-id2">
+                                        <td class="repetition-exercise">Sentadillas</td>
+                                        <td class="repetition-quantity">20</td>
+                                    </tr>
+
+                                    <tr class="block-repetitions-id2">
+                                        <td class="repetition-exercise">flexiones</td>
+                                        <td class="repetition-quantity">20</td>
+                                    </tr>
+                                    <!-- end exercises.foreach -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- end block.foreach -->
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-edit-modal" data-id="id1">Copiar</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-edit-modal" data-id="id1">Editar</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-delete-modal" data-id="id1">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Jueves</div>
+                <div class="number-in-month">4</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Viernes</div>
+                <div class="number-in-month">5</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Rutina</button>
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Sabado</div>
+                <div class="number-in-month">6</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                </div>
+            </div>
+            <div class="col-sm day-column">
+                <div class="day-name w-100">Domingo</div>
+                <div class="number-in-month">7</div>
+                <div class="routine-create-container container-fluid">
+                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
+                </div>
+
+                <div class="routines container-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
