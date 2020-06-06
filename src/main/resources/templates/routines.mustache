@@ -78,6 +78,7 @@
                                     <div id="routine-{{id}}-blocks" class="routine-blocks">
                                         {{ #exerciseBlocks }}
                                         <div class="routine-block">
+                                            <hr/>
                                             <p class="list-group-item lead block-notes">{{notes}}</p>
                                             <div class="container pb-2">
                                                 <table class="table table-stripped">
@@ -104,7 +105,7 @@
                                     <div class="text-right">
                                         <button type="button" class="btn btn-secondary" onclick="copy('{{id}}')">Copiar (WIP)</button>
                                         <button type="button" class="btn btn-secondary" onclick="edit('{{id}}')">Editar</button>
-                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-delete-modal" data-id="{{id}}">Eliminar</button>
+                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#routine-delete-modal" data-id="{{id}}">Eliminar</button>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +128,6 @@
                         </div>
                         <div class="modal-body">
                             <div id="routine-delete-content">
-                                <label>Esta seguro de que quiere eliminar </label>
                                 <p id="routine-delete-description">&times;</p>
                             </div>
                         </div>
@@ -145,7 +145,8 @@
                     const id = button.data('id');
 
                     const modal = $(this);
-                    modal.find('#routine-delete-description').text($(`#routine-${id}-description`).text());
+                    const routineDescription = $(`#routine-${id}-description`).text();
+                    modal.find('#routine-delete-description').text(`Esta seguro de que quiere eliminar '${routineDescription}'?`);
                     modal.find('#routine-delete-button').click(function() {deleteRoutine(id)});
                 });
 
