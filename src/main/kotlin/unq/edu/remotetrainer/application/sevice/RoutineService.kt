@@ -71,14 +71,9 @@ class RoutineService @Autowired constructor(
             val currentDate = startingDate.plusDays(dayIndex)
 
             RoutineDay(
-                dateDay = days[currentDate.dayOfWeek-1],
-                dateNumber = currentDate.dayOfMonth,
                 date = currentDate,
                 routines = routinesByDate[currentDate] ?: listOf()
             )
         }
     }
-
-    // TODO make enum out of this
-    val days: List<String> = listOf("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo")
 }

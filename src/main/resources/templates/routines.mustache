@@ -3,6 +3,11 @@
         {{> common/common-libraries}}
 
         <style>
+            .week-nav {
+                float: left;
+                text-align: center;
+            }
+
             .day-column {
                 border: 1px solid;
                 float: left;
@@ -58,6 +63,14 @@
         <main role="main" class="container-fluid h-100">
             <h1 class="float-left">Rutinas</h1>
             <a href="#" data-toggle="tooltip" title="Aca podes ver tus rutinas de ejercicios.">?</a>
+
+            <div class="week-nav container-fluid">
+                <h4>{{month}}</h4>
+                <div class="buttons-container">
+                    <a href="/routines?date={{previousWeek}}">Anterior</a>
+                    <a href="/routines?date={{nextWeek}}">Siguiente</a>
+                </div>
+            </div>
 
             <div class="container-fluid float-left">
                 <div class="row h-100">

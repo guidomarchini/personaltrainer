@@ -8,6 +8,7 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
+import unq.edu.remotetrainer.application.LocaleHelper
 import unq.edu.remotetrainer.application.dto.RoutineDto
 import unq.edu.remotetrainer.application.sevice.ExerciseBlockService
 import unq.edu.remotetrainer.application.sevice.ExerciseService
@@ -80,6 +81,10 @@ class ExercisesUI constructor(
         val startingDay: LocalDate = if(date != null) LocalDate.parse(date) else weeksMonday()
         model["routineDays"] = routineService.processRoutineWeek(startingDay, startingDay.plusDays(6))
 
+        model["month"] = startingDay.monthOfYear().getAsText(LocaleHelper.locale)
+        model["previousWeek"] = startingDay.minusWeeks(1)
+        model["nextWeek"] = startingDay.plusWeeks(1)
+
         return "routines"
     }
 
@@ -120,7 +125,7 @@ class ExercisesUI constructor(
         logger.info("update routine with id: $routineId")
 
         val routineToUpdate: Routine = checkNotNull(routineService.getById(routineId))
-        model["routine"] = RoutineDto(routineToUpdate).copy(id = null)
+        model["routine"] = RoutineDto(routineToUpdate.copy(id = null))
         model["create"] = true
 
         return "upsert-routine"
