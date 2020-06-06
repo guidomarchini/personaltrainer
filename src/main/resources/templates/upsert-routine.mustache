@@ -11,15 +11,18 @@
         {{> common/errors}}
 
         <main role="main" class="container-fluid h-100">
-            <h1>Crear rutina</h1>
-
-
             <div class="card">
                 <div class="card-header">
-                    <h5 class="modal-title" id="block-create-title">Crear nueva rutina</h5>
+                    {{ #create }}
+                    <h5 class="modal-title">Crear nueva rutina</h5>
+                    {{ /create }}
+                    {{ ^create }}
+                    <h5 class="modal-title">Modificar rutina</h5>
+                    {{ /create }}
                 </div>
                 <div class="card-body">
                     <div id="routine-create-content">
+                        {{ #routine }}
                         <div>
                             <label for="routine-create-date">Fecha: </label>
                             <input class="form-control" name="name" id="routine-create-date" value="{{date}}" disabled /> <!-- TODO date picker -->
@@ -27,29 +30,105 @@
                         <div>
                             <label for="routine-create-description">Descripcion corta: </label>
                             <a href="#" data-toggle="tooltip" title="Una descripcion para identificar esta rutina.">?</a>
-                            <input class="form-control" name="name" id="routine-create-description"/>
+                            <input class="form-control" name="name" id="routine-create-description" value="{{shortDescription}}"/>
                         </div>
                         <div>
                             <label for="routine-create-notes">Notas:</label>
-                            <textarea class="form-control" name="description" id="routine-create-notes"></textarea>
+                            <textarea class="form-control" name="description" id="routine-create-notes">{{notes}}</textarea>
                         </div>
                         <div id="routine-blocks" class="py-3">
-                            <!-- new blocks will be added here -->
+                            {{ #exerciseBlocks }}
+                            <div class="container-fluid block-container" id="block-{{id}}">
+                                <input type="hidden" class="block-id" value="{{id}}"></input>
+                                {{#name}}
+                                <a href="#" class="btn btn-dark block-name btn-block" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">{{name}}</a>
+                                {{/name}}
+                                {{^name}}
+                                <a href="#" class="btn btn-dark block-name btn-block unnamed" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">this will be replaced onload</a>
+                                {{/name}}
+
+                                <div class="pb-5 collapse" id="collapsible-{{id}}">
+                                    <div>
+                                        <label>Notas:</label>
+                                        <textarea class="form-control block-notes">{{notes}}</textarea>
+                                    </div>
+
+                                    <table class="table table-stripped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Ejercicio</th>
+                                            <th scope="col">Repeticiones</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="block-{{id}}-exercises" class="block-exercises">
+                                        {{ #exercises }}
+                                        {{ #name }}
+                                        <tr>
+                                            <th scope="col">
+                                                <input class="block-exercise" value="{{exercise.name}}" disabled></input>
+                                            </th>
+                                            <th scope="col">
+                                                <input class="block-quantity" value="{{quantity}}" disabled></input>
+                                            </th>
+                                        </tr>
+                                        {{ /name }}
+                                        {{ ^name }}
+                                        <tr id="repetition-{{id}}">
+                                            <th scope="col">
+                                                <select class="block-exercise">
+                                                    <option hidden value="{{exercise.name}}"></option>
+                                                </select>
+                                            </th>
+                                            <th scope="col">
+                                                <input class="block-quantity" value="{{quantity}}"></input>
+                                            </th>
+                                            <th scope="col">
+                                                <button type="button" class="btn btn-dark btn-sm" onclick="remove('repetition-{{id}}')">X</button>
+                                            </th>
+                                        </tr>
+                                        {{ /name }}
+                                        {{ /exercises }}
+                                        </tbody>
+                                    </table>
+
+                                    <div class="float-right">
+                                        <button class="btn btn-secondary btn-sm" onclick="remove('block-{{id}}');renameBlocks()">Eliminar bloque</button>
+                                        <button class="btn btn-dark btn-sm" onclick="addExercise('block-{{id}}-exercises')">Agregar ejercicio</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ /exerciseBlocks }}
                         </div>
 
                         <div class="float-right" style="padding-top: 20px">
-                            <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock('{{routineId}}')">Agregar bloque de ejercicio</button>
+                            <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock()">Agregar bloque de ejercicio</button>
                         </div>
+                        {{ /routine }}
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="/routines" class="btn btn-secondary">Cancelar</a>
+
+                    {{ #create }}
                     <button type="button" class="btn btn-dark" onclick="createRoutine()">Crear</button>
+                    {{ /create }}
+                    {{ ^create }}
+                    <button type="button" class="btn btn-dark" onclick="updateRoutine('{{routine.id}}')">Modificar</button>
+                    {{ /create }}
                 </div>
             </div>
 
             <script>
-                $('#nav-routine').addClass('active')
+                $('#nav-routine').addClass('active');
+
+                // waits for the exercises to be downloaded, then fills the loaded options for update/copy
+                setTimeout(
+                    function(){
+                        fillLoadedExerciseOptions();
+                        renameBlocks();
+                    }, 500
+                );
             </script>
         </main>
     </body>

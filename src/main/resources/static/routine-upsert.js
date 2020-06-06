@@ -1,3 +1,72 @@
+/* ******************** *
+ * * global variables * *
+ * ******************** */
+let exercises;
+let namedBlocks;
+
+fetch('/api/exercises', {
+    method: 'GET'
+}).then(function(response) {
+    if(response.ok) {
+        response.json().then(data => {
+            exercises = data;
+        })
+    } else {
+        onError(response);
+    }
+});
+
+/* ******************** *
+ * **** Utilities ***** *
+ * ******************** */
+/**
+ * Given a select, fills its content with the available exercises.
+ * @param select the select Element
+ */
+function fillExerciseOptions(select) {
+    exercises.forEach(function(exercise){
+        const option = document.createElement('option');
+        $(option).data(exercise);
+        option.innerText = exercise.name;
+        select.appendChild(option);
+    });
+}
+
+/**
+ * This function is called onload.
+ * It loads the exercises into the select, having an exercise selected.
+ */
+function fillLoadedExerciseOptions() {
+    $('select.block-exercise').each(function() {
+        const selectedValue = $(this).find('option').val();
+        $(this).find('option').remove();
+        fillExerciseOptions(this);
+        $(this).find(`option:contains('${selectedValue}')`).prop('selected', true);
+    });
+}
+
+/**
+ * As you can have unnamed blocks, this contains the logic to rename them.
+ * This will be called on delete
+ */
+function renameBlocks() {
+    $('#routine-blocks')
+        .children('.block-container')
+        .children('.block-name')
+        .each(function(index, nameContainer) {
+            if ($(nameContainer).hasClass('unnamed')) {
+                nameContainer.innerText = `Bloque #${index}`;
+            }
+        });
+}
+
+/* *********************************** *
+ * ***** Add/remove blocks logic ***** *
+ * *********************************** */
+
+/**
+ * Adds a new exercise block to the routine
+ */
 function addExerciseBlock() {
     const routineBlocks = document.getElementById('routine-blocks');
 
@@ -11,7 +80,8 @@ function addExerciseBlock() {
     collapsibleContent.appendChild(exerciseBlockContainer);
     collapsibleContent.appendChild(blockButtons(blockContainer, exerciseBlockContainer));
 
-    const triggerButton = document.createElement('button');
+    const triggerButton = document.createElement('a');
+    triggerButton.href = "#";
     triggerButton.className = 'btn btn-dark block-name btn-block unnamed';
     triggerButton.innerText = `Bloque #${routineBlocks.childElementCount}`;
     triggerButton.onclick = function() {
@@ -24,6 +94,9 @@ function addExerciseBlock() {
     routineBlocks.appendChild(blockContainer);
 }
 
+/**
+ * Generates the exercise block headers (notes)
+ */
 function blockHeader() {
     const container = document.createElement('div');
 
@@ -38,6 +111,9 @@ function blockHeader() {
     return container;
 }
 
+/**
+ * Generates the exercise block buttons
+ */
 function blockButtons(blockContainer, exerciseBlockContainer) {
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'float-right';
@@ -63,6 +139,13 @@ function blockButtons(blockContainer, exerciseBlockContainer) {
     return buttonContainer;
 }
 
+function addExercise(tbodyId) {
+    $(`#${tbodyId}`).append(exerciseRow());
+}
+
+/**
+ * Generates the block content (exercise repetitions)
+ */
 function blockContent() {
     const table = document.createElement('table');
     table.className = 'table table-stripped';
@@ -82,6 +165,9 @@ function blockContent() {
     return table;
 }
 
+/**
+ * Generates an exercise repetition table column
+ */
 function tableColumn(innerText) {
     const th = document.createElement('th');
     th.scope = 'col';
@@ -90,17 +176,15 @@ function tableColumn(innerText) {
     return th;
 }
 
+/**
+ * Generates a row for a new exercise
+ */
 function exerciseRow() {
     const tr = document.createElement('tr');
 
     const select = document.createElement('select');
     select.className = 'block-exercise';
-    exercises.forEach(function(exercise){
-        const option = document.createElement('option');
-        $(option).data(exercise);
-        option.innerText = exercise.name;
-        select.appendChild(option);
-    });
+    fillExerciseOptions(select);
 
     const exerciseTh = document.createElement('th');
     exerciseTh.scope = 'col';
@@ -130,19 +214,23 @@ function exerciseRow() {
     return tr;
 }
 
-function renameBlocks() {
-    $('#routine-blocks').children('.block-container').children('.block-name').each(function(index, nameContainer) {
-        if ($(nameContainer).hasClass('unnamed')) {
-            nameContainer.innerText = `Bloque #${index}`;
-        }
-    });
+
+/* ******************** *
+ * **** Api Calls ***** *
+ * ******************** */
+function createRoutine() {
+    upsertRoutine(undefined, 'POST');
 }
 
-function createRoutine(routineId) {
+function updateRoutine(routineId) {
+    upsertRoutine(routineId, 'PUT');
+}
+
+function upsertRoutine(routineId, methodType) {
     const body = extractRoutine(routineId);
 
     fetch('/api/routines', {
-        method: 'POST',
+        method: methodType,
         body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
@@ -157,6 +245,9 @@ function createRoutine(routineId) {
     })
 }
 
+/**
+ * Extracts the routine from the html
+ */
 function extractRoutine(routineId) {
     return {
         'id': routineId,
@@ -167,6 +258,9 @@ function extractRoutine(routineId) {
     }
 }
 
+/**
+ * Extracts the exercise blocks from the html
+ */
 function extractBlocks() {
     const blocks = [];
 
@@ -177,9 +271,14 @@ function extractBlocks() {
     return blocks;
 }
 
+/**
+ * Extracts the exercise block from the desired block container
+ */
 function extractBlock(blockContainer) {
     if (jQuery.isEmptyObject($(blockContainer).data())) {
         return {
+            'id': extractBlockId(blockContainer),
+            'name': extractBlockName(blockContainer),
             'notes': $(blockContainer).find('.block-notes').val(),
             'exercises': extractBlockExercises(blockContainer)
         }
@@ -188,6 +287,23 @@ function extractBlock(blockContainer) {
     }
 }
 
+/**
+ * Extracts the block id from the block container
+ */
+function extractBlockId(blockContainer) {
+    return $(blockContainer).has('.block-id') ? $(blockContainer).find('.block-id').val() : undefined;
+}
+
+/**
+ * Extracts the block name from the block container
+ */
+function extractBlockName(blockContainer) {
+    return $(blockContainer).has('.unnamed') ? undefined : $(blockContainer).find('.block-name').text()
+}
+
+/**
+ * Extracts the exercise block's exercises from the desired block container
+ */
 function extractBlockExercises(blockContainer) {
     const blockExercises = [];
 
@@ -200,20 +316,3 @@ function extractBlockExercises(blockContainer) {
 
     return blockExercises;
 }
-
-
-
-
-let exercises;
-
-fetch('/api/exercises', {
-    method: 'GET'
-}).then(function(response) {
-    if(response.ok) {
-        response.json().then(data => {
-            exercises = data;
-        })
-    } else {
-        onError(response);
-    }
-});

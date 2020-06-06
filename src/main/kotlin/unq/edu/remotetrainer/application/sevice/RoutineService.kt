@@ -36,6 +36,8 @@ class RoutineService @Autowired constructor(
                 if (it.id == null) {
                     exerciseBlockService.create(it)
                 } else {
+                    // TODO check out differences between saved and updated.
+                    // Removed && unnamed blocks should be removed!
                     exerciseBlockService.update(it)
                 }
             }

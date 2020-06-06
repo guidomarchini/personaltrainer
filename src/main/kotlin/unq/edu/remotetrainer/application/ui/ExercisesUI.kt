@@ -8,11 +8,13 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
+import unq.edu.remotetrainer.application.dto.RoutineDto
 import unq.edu.remotetrainer.application.sevice.ExerciseBlockService
 import unq.edu.remotetrainer.application.sevice.ExerciseService
 import unq.edu.remotetrainer.application.sevice.RoutineService
 import unq.edu.remotetrainer.application.sevice.TrackingService
 import unq.edu.remotetrainer.model.Exercise
+import unq.edu.remotetrainer.model.Routine
 import unq.edu.remotetrainer.model.Tracking
 
 @Controller
@@ -91,12 +93,40 @@ class ExercisesUI constructor(
         val parsedDate: LocalDate = LocalDate.parse(dateAsString)
         logger.info("creating a new routien for (default) date: $parsedDate")
 
-        model["routineId"] = "null"
-        model["date"] = dateAsString
-
+        model["routine"] = RoutineDto(date = parsedDate)
+        model["create"] = true
 
         return "upsert-routine"
     }
+
+    @GetMapping("routines/update")
+    fun updateRoutine(
+        model: Model,
+        @RequestParam routineId: Int
+    ): String {
+        logger.info("update routine with id: $routineId")
+
+        val routineToUpdate: Routine = checkNotNull(routineService.getById(routineId))
+        model["routine"] = RoutineDto(routineToUpdate)
+        model["create"] = false
+
+        return "upsert-routine"
+    }
+
+    @GetMapping("routines/copy")
+    fun copyRoutine(
+        model: Model,
+        @RequestParam routineId: Int
+    ): String {
+        logger.info("update routine with id: $routineId")
+
+        val routineToUpdate: Routine = checkNotNull(routineService.getById(routineId))
+        model["routine"] = RoutineDto(routineToUpdate).copy(id = null)
+        model["create"] = true
+
+        return "upsert-routine"
+    }
+
 
     /**
      * Returns the current monday of the week

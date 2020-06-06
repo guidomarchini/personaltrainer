@@ -72,8 +72,8 @@
                         <div class="routines container-fluid">
                             {{ #routines }}
                             <div id="routine-{{id}}">
-                                <a id="routine-{{id}}-description" href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" data-target="#collapsable-{{id}}">{{shortDescription}}</a>
-                                <div id="collapsable-{{id}}" class="collapse pb-3">
+                                <a id="routine-{{id}}-description" href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" data-target="#collapsible-{{id}}">{{shortDescription}}</a>
+                                <div id="collapsible-{{id}}" class="collapse pb-3">
                                     <div id="routine-{{id}}-notes" class="container-fluid">{{notes}}</div>
                                     <div id="routine-{{id}}-blocks" class="routine-blocks">
                                         {{ #exerciseBlocks }}
@@ -103,8 +103,8 @@
                                         {{ /exerciseBlocks }}
                                     </div>
                                     <div class="text-right">
-                                        <button type="button" class="btn btn-secondary" onclick="copy('{{id}}')">Copiar (WIP)</button>
-                                        <button type="button" class="btn btn-secondary" onclick="edit('{{id}}')">Editar</button>
+                                        <a class="btn btn-secondary" href="/routines/copy?routineId={{id}}">Copiar</a>
+                                        <a class="btn btn-secondary" href="/routines/update?routineId={{id}}">Editar</a>
                                         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#routine-delete-modal" data-id="{{id}}">Eliminar</button>
                                     </div>
                                 </div>
