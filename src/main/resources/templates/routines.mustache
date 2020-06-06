@@ -121,7 +121,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="routine-delete-title">Borrar bloque de ejercicio</h5>
+                            <h5 class="modal-title" id="routine-delete-title">Borrar Rutina</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -144,7 +144,7 @@
                     const button = $(event.relatedTarget);
                     const id = button.data('id');
 
-                    const modal = $(this);
+                    const modal = $('#routine-delete-modal');
                     const routineDescription = $(`#routine-${id}-description`).text();
                     modal.find('#routine-delete-description').text(`Esta seguro de que quiere eliminar '${routineDescription}'?`);
                     modal.find('#routine-delete-button').click(function() {deleteRoutine(id)});

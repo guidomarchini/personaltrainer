@@ -2,6 +2,10 @@
     <head>
         {{> common/common-libraries}}
 
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.min.css"/>
+        <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
         <script src="/routine-upsert.js"></script>
     </head>
 
@@ -108,7 +112,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/routines" class="btn btn-secondary">Cancelar</a>
+                    <button type="button" class="btn btn-dark" onclick="goBack()">Cancelar</button>
 
                     {{ #create }}
                     <button type="button" class="btn btn-dark" onclick="createRoutine()">Crear</button>
@@ -125,6 +129,11 @@
                 $('#routine-create-date').datepicker({
                     dateFormat: "yy-mm-dd"
                 });
+
+                function goBack() {
+                    const routineMonday = getMonday('{{routine.date}}');
+                    window.location.href = `/routines?date=${routineMonday}`;
+                }
 
                 // waits for the exercises to be downloaded, then fills the loaded options for update/copy
                 setTimeout(

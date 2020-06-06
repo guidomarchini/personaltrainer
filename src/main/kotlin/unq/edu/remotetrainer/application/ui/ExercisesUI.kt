@@ -74,11 +74,10 @@ class ExercisesUI constructor(
     @GetMapping("/routines")
     fun routines(
         model: Model,
-        @RequestParam from: LocalDate?
+        @RequestParam date: String?
     ): String {
-        // TODO add next and previous week
-
-        val startingDay: LocalDate = from ?: weeksMonday()
+        // can't receive a LocalDate :(
+        val startingDay: LocalDate = if(date != null) LocalDate.parse(date) else weeksMonday()
         model["routineDays"] = routineService.processRoutineWeek(startingDay, startingDay.plusDays(6))
 
         return "routines"

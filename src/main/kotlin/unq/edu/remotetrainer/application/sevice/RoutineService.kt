@@ -71,7 +71,7 @@ class RoutineService @Autowired constructor(
             val currentDate = startingDate.plusDays(dayIndex)
 
             RoutineDay(
-                dateDay = days[dayIndex],
+                dateDay = days[currentDate.dayOfWeek-1],
                 dateNumber = currentDate.dayOfMonth,
                 date = currentDate,
                 routines = routinesByDate[currentDate] ?: listOf()
