@@ -2,7 +2,6 @@
  * * global variables * *
  * ******************** */
 let exercises;
-let namedBlocks;
 
 fetch('/api/exercises', {
     method: 'GET'
@@ -46,17 +45,14 @@ function fillLoadedExerciseOptions() {
 }
 
 /**
- * As you can have unnamed blocks, this contains the logic to rename them.
- * This will be called on delete
+ * Deleting or moving a block should rename all blocks.
  */
 function renameBlocks() {
     $('#routine-blocks')
         .children('.block-container')
         .children('.block-name')
         .each(function(index, nameContainer) {
-            if ($(nameContainer).hasClass('unnamed')) {
-                nameContainer.innerText = `Bloque #${index}`;
-            }
+            nameContainer.innerText = `Bloque #${index}`;
         });
 }
 
@@ -76,8 +72,36 @@ function getMonday(routineDay) {
  * ***** Add/remove blocks logic ***** *
  * *********************************** */
 
+
+/* ************************ *
+ * ***** Named Blocks ***** *
+ * ************************ */
 /**
- * Adds a new exercise block to the routine
+ * Adds a named block to the routine.
+ * Named blocks can't be modified.
+ */
+function addNamedBlock() {
+    const namedBlock = $('#named-blocks-select :selected').data();
+    const routineBlock = addExerciseBlock();
+
+    $(routineBlock).find('.block-notes').text(namedBlock.notes);
+
+    const exercisesTable = $(routineBlock).find('.block-exercises');
+    namedBlock.exercises.forEach(function(exerciseRepetition){
+        const newRow = $(exerciseRow());
+        exercisesTable.append(newRow);
+
+        newRow.find(`.block-exercise option:contains('${exerciseRepetition.exercise.name}')`).prop('selected', true);
+        newRow.find('.block-quantity').val(exerciseRepetition.quantity);
+    });
+}
+
+/* ******************************* *
+ * ***** This routine blocks ***** *
+ * ******************************* */
+/**
+ * Adds a new exercise block to the routine.
+ * Returns the newly added block container.
  */
 function addExerciseBlock() {
     const routineBlocks = document.getElementById('routine-blocks');
@@ -94,7 +118,7 @@ function addExerciseBlock() {
 
     const triggerButton = document.createElement('a');
     triggerButton.href = "#";
-    triggerButton.className = 'btn btn-dark block-name btn-block unnamed';
+    triggerButton.className = 'btn btn-dark block-name btn-block';
     triggerButton.innerText = `Bloque #${routineBlocks.childElementCount}`;
     triggerButton.onclick = function() {
         $(collapsibleContent).collapse('toggle');
@@ -104,6 +128,8 @@ function addExerciseBlock() {
     blockContainer.appendChild(collapsibleContent);
 
     routineBlocks.appendChild(blockContainer);
+
+    return blockContainer;
 }
 
 /**
@@ -241,6 +267,8 @@ function updateRoutine(routineId) {
 function upsertRoutine(routineId, methodType) {
     const body = extractRoutine(routineId);
 
+    console.log(body);
+
     fetch('/api/routines', {
         method: methodType,
         body: JSON.stringify(body),
@@ -290,7 +318,6 @@ function extractBlock(blockContainer) {
     if (jQuery.isEmptyObject($(blockContainer).data())) {
         return {
             'id': extractBlockId(blockContainer),
-            'name': extractBlockName(blockContainer),
             'notes': $(blockContainer).find('.block-notes').val(),
             'exercises': extractBlockExercises(blockContainer)
         }
@@ -304,13 +331,6 @@ function extractBlock(blockContainer) {
  */
 function extractBlockId(blockContainer) {
     return $(blockContainer).has('.block-id') ? $(blockContainer).find('.block-id').val() : undefined;
-}
-
-/**
- * Extracts the block name from the block container
- */
-function extractBlockName(blockContainer) {
-    return $(blockContainer).has('.unnamed') ? undefined : $(blockContainer).find('.block-name').text()
 }
 
 /**

@@ -1,7 +1,6 @@
 <html>
     <head>
         {{> common/common-libraries}}
-
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.min.css"/>
         <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -44,12 +43,7 @@
                             {{ #exerciseBlocks }}
                             <div class="container-fluid block-container" id="block-{{id}}">
                                 <input type="hidden" class="block-id" value="{{id}}"></input>
-                                {{#name}}
-                                <a href="#" class="btn btn-dark block-name btn-block" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">{{name}}</a>
-                                {{/name}}
-                                {{^name}}
-                                <a href="#" class="btn btn-dark block-name btn-block unnamed" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">this will be replaced onload</a>
-                                {{/name}}
+                                <a href="#" class="btn btn-dark block-name btn-block" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">this will be replaced onload</a>
 
                                 <div class="pb-5 collapse" id="collapsible-{{id}}">
                                     <div>
@@ -67,17 +61,6 @@
                                         </thead>
                                         <tbody id="block-{{id}}-exercises" class="block-exercises">
                                         {{ #exercises }}
-                                        {{ #name }}
-                                        <tr>
-                                            <th scope="col">
-                                                <input class="block-exercise" value="{{exercise.name}}" disabled></input>
-                                            </th>
-                                            <th scope="col">
-                                                <input class="block-quantity" value="{{quantity}}" disabled></input>
-                                            </th>
-                                        </tr>
-                                        {{ /name }}
-                                        {{ ^name }}
                                         <tr id="repetition-{{id}}">
                                             <th scope="col">
                                                 <select class="block-exercise">
@@ -91,7 +74,6 @@
                                                 <button type="button" class="btn btn-dark btn-sm" onclick="remove('repetition-{{id}}')">X</button>
                                             </th>
                                         </tr>
-                                        {{ /name }}
                                         {{ /exercises }}
                                         </tbody>
                                     </table>
@@ -105,7 +87,16 @@
                             {{ /exerciseBlocks }}
                         </div>
 
-                        <div class="float-right" style="padding-top: 20px">
+                        <div class="float-right btn-toolbar" style="padding-top: 20px">
+                            <div class="input-group mr-3">
+                                <select class="custom-select" id="named-blocks-select">
+                                    <option value="" disabled selected>Bloques existentes...</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-dark btn-sm" type="button" onclick="addNamedBlock()">Copiar en la rutina</button>
+                                </div>
+                            </div>
+
                             <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock()">Agregar bloque de ejercicio</button>
                         </div>
                         {{ /routine }}
@@ -134,6 +125,24 @@
                     const routineMonday = getMonday('{{routine.date}}');
                     window.location.href = `/routines?date=${routineMonday}`;
                 }
+
+                fetch('/api/blocks?named=true', {
+                    method: 'GET'
+                }).then(function(response) {
+                    if(response.ok) {
+                        response.json().then(data => {
+                            data.forEach(function(namedBlock) {
+                                const option = document.createElement('option');
+                                $(option).data(namedBlock);
+                                option.innerText = namedBlock.name;
+
+                                document.getElementById('named-blocks-select').appendChild(option)
+                            });
+                        })
+                    } else {
+                        onError(response);
+                    }
+                });
 
                 // waits for the exercises to be downloaded, then fills the loaded options for update/copy
                 setTimeout(

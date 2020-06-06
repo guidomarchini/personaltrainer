@@ -21,9 +21,14 @@ class ExerciseBlockController constructor(
     }
 
     @GetMapping("/blocks")
-    fun blocks(): List<ExerciseBlock> {
-        logger.info("Retrieving all ExcerciseBlocks")
-        return exerciseBlockService.getAll()
+    fun blocks(@RequestParam named: Boolean?): List<ExerciseBlock> {
+        if (named != null && named) {
+            logger.info("Retrieving named ExcerciseBlocks")
+            return exerciseBlockService.getAllNamedBlocks()
+        } else {
+            logger.info("Retrieving all ExcerciseBlocks")
+            return exerciseBlockService.getAll()
+        }
     }
 
     @GetMapping("/blocks/{id}")

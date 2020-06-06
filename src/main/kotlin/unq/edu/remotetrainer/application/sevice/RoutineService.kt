@@ -20,24 +20,20 @@ class RoutineService @Autowired constructor(
     override fun create(modelObject: Routine): Routine {
         val savedExerciseBlocks: List<ExerciseBlock> =
             modelObject.exerciseBlocks.map {
-                if (it.id == null) {
-                    exerciseBlockService.create(it)
-                } else {
-                    it
-                }
+                exerciseBlockService.create(it)
             }
 
         return super.create(modelObject.copy(exerciseBlocks = savedExerciseBlocks))
     }
 
     override fun update(modelObject: Routine): Routine {
+        // TODO check out differences between saved and updated.
+        // Removed && unnamed blocks should be removed!
         val updatedExerciseBlocks: List<ExerciseBlock> =
             modelObject.exerciseBlocks.map {
                 if (it.id == null) {
                     exerciseBlockService.create(it)
                 } else {
-                    // TODO check out differences between saved and updated.
-                    // Removed && unnamed blocks should be removed!
                     exerciseBlockService.update(it)
                 }
             }
