@@ -1,0 +1,56 @@
+<html>
+    <head>
+        {{> common/common-libraries}}
+
+        <script src="/routine-upsert.js"></script>
+    </head>
+
+
+    <body class="bg-light">
+        {{> common/navigation}}
+        {{> common/errors}}
+
+        <main role="main" class="container-fluid h-100">
+            <h1>Crear rutina</h1>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="modal-title" id="block-create-title">Crear nueva rutina</h5>
+                </div>
+                <div class="card-body">
+                    <div id="routine-create-content">
+                        <div>
+                            <label for="routine-create-date">Fecha: </label>
+                            <input class="form-control" name="name" id="routine-create-date" value="{{date}}" disabled /> <!-- TODO date picker -->
+                        </div>
+                        <div>
+                            <label for="routine-create-description">Descripcion corta: </label>
+                            <a href="#" data-toggle="tooltip" title="Una descripcion para identificar esta rutina.">?</a>
+                            <input class="form-control" name="name" id="routine-create-description"/>
+                        </div>
+                        <div>
+                            <label for="routine-create-notes">Notas:</label>
+                            <textarea class="form-control" name="description" id="routine-create-notes"></textarea>
+                        </div>
+                        <div id="routine-blocks" class="py-3">
+                            <!-- new blocks will be added here -->
+                        </div>
+
+                        <div class="float-right" style="padding-top: 20px">
+                            <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock('{{routineId}}')">Agregar bloque de ejercicio</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark" onclick="createRoutine()">Crear</button>
+                </div>
+            </div>
+
+            <script>
+                $('#nav-routine').addClass('active')
+            </script>
+        </main>
+    </body>
+</html>

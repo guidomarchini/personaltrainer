@@ -23,12 +23,14 @@ internal class RoutineServiceTest : AbstractServiceTest<Routine, RoutineEntity>(
         )
 
     override val repository: RoutineRepository = mock()
-    override val mapper: RoutineMapper= mock()
+    override val mapper: RoutineMapper = mock()
+    val exerciseBlockServiceMock: ExerciseBlockService = mock()
 
     override val service: RoutineService =
         RoutineService(
             repository = repository,
-            mapper = mapper
+            mapper = mapper,
+            exerciseBlockService = exerciseBlockServiceMock
         )
 
     @Test
@@ -51,4 +53,6 @@ internal class RoutineServiceTest : AbstractServiceTest<Routine, RoutineEntity>(
         assertThat(result).hasSize(1)
         verify(repository).getAllByDateBetween(startingDate, endingDate)
     }
+
+    // TODO processRoutineWeek(), create(), update()
 }

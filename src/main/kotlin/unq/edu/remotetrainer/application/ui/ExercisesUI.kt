@@ -1,9 +1,13 @@
 package unq.edu.remotetrainer.application.ui
 
+import org.joda.time.LocalDate
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 import unq.edu.remotetrainer.application.sevice.ExerciseBlockService
 import unq.edu.remotetrainer.application.sevice.ExerciseService
 import unq.edu.remotetrainer.application.sevice.RoutineService
@@ -18,6 +22,11 @@ class ExercisesUI constructor(
     val exerciseBlockService: ExerciseBlockService,
     val routineService: RoutineService
 ) {
+
+    companion object {
+        @JvmStatic
+        private val logger: Logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
     @GetMapping("")
     fun home(model: Model): String {
@@ -61,9 +70,39 @@ class ExercisesUI constructor(
     }
 
     @GetMapping("/routines")
-    fun routines(model: Model): String {
-        model["routines"] = routineService.getAll()
+    fun routines(
+        model: Model,
+        @RequestParam from: LocalDate?
+    ): String {
+        // TODO add next and previous week
+
+        val startingDay: LocalDate = from ?: weeksMonday()
+        model["routineDays"] = routineService.processRoutineWeek(startingDay, startingDay.plusDays(6))
 
         return "routines"
+    }
+
+    @GetMapping("routines/create")
+    fun createRoutine(
+        model: Model,
+        @RequestParam(name = "date") dateAsString: String
+    ): String {
+        // can't receive a LocalDate :(
+        val parsedDate: LocalDate = LocalDate.parse(dateAsString)
+        logger.info("creating a new routien for (default) date: $parsedDate")
+
+        model["routineId"] = "null"
+        model["date"] = dateAsString
+
+
+        return "upsert-routine"
+    }
+
+    /**
+     * Returns the current monday of the week
+     */
+    private fun weeksMonday(): LocalDate {
+        val date: LocalDate = LocalDate()
+        return date.minusDays(date.dayOfWeek-1)
     }
 }

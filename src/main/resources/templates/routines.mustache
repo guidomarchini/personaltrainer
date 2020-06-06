@@ -1,186 +1,156 @@
 <html>
-<head>
-    {{> common/common-libraries}}
+    <head>
+        {{> common/common-libraries}}
 
-    <style>
-        .day-column {
-            border: 1px solid;
-            float: left;
-            padding-left: 0;
-            padding-right: 0;
-        }
+        <style>
+            .day-column {
+                border: 1px solid;
+                float: left;
+                padding-left: 0;
+                padding-right: 0;
+            }
 
-        .day-column button {
-            width: 100%;
-        }
+            .day-column button {
+                width: 100%;
+            }
 
-        .day-name {
-            text-align: center;
-        }
+            .day-name {
+                text-align: center;
+            }
 
-        .number-in-month {
-            font-size: xx-large;
-            text-align: center;
-        }
+            .number-in-month {
+                font-size: xx-large;
+                text-align: center;
+            }
 
-        .routines {
-            padding-top: 20px;
-        }
+            .routines {
+                padding-top: 20px;
+            }
 
-        .block-notes {
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
-    </style>
+            .block-notes {
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+        </style>
 
-</head>
+        <script>
+            // api calls
+            function deleteRoutine(id) {
+                fetch(`api/routines/${id}`, {
+                    method: 'DELETE'
+                }).then(function(response) {
+                    if(response.ok) {
+                        $(`#routine-${id}`).remove();
+                        $('#routine-delete-modal').modal('hide');
+                    } else {
+                        onError(response);
+                    }
+                })
+            }
+        </script>
+    </head>
 
 
-<body class="bg-light">
-{{> common/navigation}}
-{{> common/errors}}
+    <body class="bg-light">
+        {{> common/navigation}}
+        {{> common/errors}}
 
-<main role="main" class="container-fluid h-100">
-    <h1 class="float-left">Rutinas</h1>
-    <a href="#" data-toggle="tooltip" title="Arma las rutinas de ejercicios para hacer en una fecha dada.">?</a>
+        <main role="main" class="container-fluid h-100">
+            <h1 class="float-left">Rutinas</h1>
+            <a href="#" data-toggle="tooltip" title="Aca podes ver tus rutinas de ejercicios.">?</a>
 
-    <div class="container-fluid float-left">
-        <div class="row h-100">
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Lunes</div>
-                <div class="number-in-month">1</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
-
-                <div class="routines container-fluid">
-                </div>
-            </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Martes</div>
-                <div class="number-in-month">2</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
-
-                <div class="routines container-fluid">
-                </div>
-            </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Miercoles</div>
-                <div class="number-in-month">3</div> <!-- to be added dynamically -->
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
-
-                <div class="routines container-fluid"> <!-- to be added dynamically -->
-                    <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="routine-id-id" data-target="#collapsable-id">Routine short description</a>
-                    <div id="collapsable-id" class="collapse pb-3">
-                        <div class="container-fluid">Routine Notes</div>
-                        <div class="routine-blocks">
-                            <!-- blocks.foreach -->
-                            <p class="list-group-item lead block-notes" id="block-notes-id">A block notes</p>
-                            <div class="container pb-2">
-                                <table class="table table-stripped">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Ejercicio</th>
-                                        <th scope="col">Repeticiones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <!-- exercises.foreach -->
-                                    <tr class="block-repetitions-id">
-                                        <td class="repetition-exercise">Sentadillas</td>
-                                        <td class="repetition-quantity">20</td>
-                                    </tr>
-
-                                    <tr class="block-repetitions-id">
-                                        <td class="repetition-exercise">flexiones</td>
-                                        <td class="repetition-quantity">20</td>
-                                    </tr>
-                                    <!-- end exercises.foreach -->
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <p class="list-group-item lead" id="block-notes-id2">Second block notes</p>
-                            <div class="container pb-2">
-                                <table class="table table-stripped">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Ejercicio</th>
-                                        <th scope="col">Repeticiones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <!-- exercises.foreach -->
-                                    <tr class="block-repetitions-id2">
-                                        <td class="repetition-exercise">Sentadillas</td>
-                                        <td class="repetition-quantity">20</td>
-                                    </tr>
-
-                                    <tr class="block-repetitions-id2">
-                                        <td class="repetition-exercise">flexiones</td>
-                                        <td class="repetition-quantity">20</td>
-                                    </tr>
-                                    <!-- end exercises.foreach -->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- end block.foreach -->
+            <div class="container-fluid float-left">
+                <div class="row h-100">
+                    {{ #routineDays }}
+                    <div class="col-sm day-column">
+                        <div class="day-name w-100">{{dateDay}}</div>
+                        <div class="number-in-month">{{dateNumber}}</div>
+                        <div class="routine-create-container container-fluid">
+                            <a class="btn btn-dark btn-lg" href="/routines/create?date={{date}}">Crear</a>
                         </div>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-edit-modal" data-id="id1">Copiar</button>
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-edit-modal" data-id="id1">Editar</button>
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-delete-modal" data-id="id1">Eliminar</button>
+
+                        <div class="routines container-fluid">
+                            {{ #routines }}
+                            <div id="routine-{{id}}">
+                                <a id="routine-{{id}}-description" href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" data-target="#collapsable-{{id}}">{{shortDescription}}</a>
+                                <div id="collapsable-{{id}}" class="collapse pb-3">
+                                    <div id="routine-{{id}}-notes" class="container-fluid">{{notes}}</div>
+                                    <div id="routine-{{id}}-blocks" class="routine-blocks">
+                                        {{ #exerciseBlocks }}
+                                        <div class="routine-block">
+                                            <p class="list-group-item lead block-notes">{{notes}}</p>
+                                            <div class="container pb-2">
+                                                <table class="table table-stripped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Ejercicio</th>
+                                                        <th scope="col">Repeticiones</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {{ #exercises }}
+                                                    <tr class="block-repetitions">
+                                                        <td class="repetition-exercise">{{exercise.name}}</td>
+                                                        <td class="repetition-quantity">{{quantity}}</td>
+                                                    </tr>
+                                                    {{ /exercises }}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        {{ /exerciseBlocks }}
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-secondary" onclick="copy('{{id}}')">Copiar (WIP)</button>
+                                        <button type="button" class="btn btn-secondary" onclick="edit('{{id}}')">Editar</button>
+                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#block-delete-modal" data-id="{{id}}">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ /routines }}
+                        </div>
+                    </div>
+                    {{ /routineDays }}
+                </div>
+            </div>
+
+            <!-- DELETE popup -->
+            <div class="modal fade" id="routine-delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="routine-delete-title">Borrar bloque de ejercicio</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="routine-delete-content">
+                                <label>Esta seguro de que quiere eliminar </label>
+                                <p id="routine-delete-description">&times;</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-dark" id="routine-delete-button">Eliminar</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Jueves</div>
-                <div class="number-in-month">4</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
 
-                <div class="routines container-fluid">
-                </div>
-            </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Viernes</div>
-                <div class="number-in-month">5</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
+            <script>
+                $('#routine-delete-modal').on('show.bs.modal', function (event) {
+                    const button = $(event.relatedTarget);
+                    const id = button.data('id');
 
-                <div class="routines container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Rutina</button>
-                </div>
-            </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Sabado</div>
-                <div class="number-in-month">6</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
+                    const modal = $(this);
+                    modal.find('#routine-delete-description').text($(`#routine-${id}-description`).text());
+                    modal.find('#routine-delete-button').click(function() {deleteRoutine(id)});
+                });
 
-                <div class="routines container-fluid">
-                </div>
-            </div>
-            <div class="col-sm day-column">
-                <div class="day-name w-100">Domingo</div>
-                <div class="number-in-month">7</div>
-                <div class="routine-create-container container-fluid">
-                    <button type="button" class="btn btn-dark btn-lg">Crear</button>
-                </div>
-
-                <div class="routines container-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-</body>
+                $('#nav-routine').addClass('active')
+            </script>
+        </main>
+    </body>
 </html>
