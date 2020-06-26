@@ -56,18 +56,6 @@ function renameBlocks() {
         });
 }
 
-/**
- * Returns the monday of the week from the routine.
- * This is used to redirect the webpage
- */
-function getMonday(routineDay) {
-    const currentDate = new Date(routineDay);
-    const day = currentDate.getDay();
-    const diff = currentDate.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
-
-    const weeksMonday = new Date(currentDate.setDate(diff));
-    return $.datepicker.formatDate( "yy-mm-dd", weeksMonday );
-}
 /* *********************************** *
  * ***** Add/remove blocks logic ***** *
  * *********************************** */
@@ -277,8 +265,7 @@ function upsertRoutine(routineId, methodType) {
         }
     }).then(function(response) {
         if(response.ok) {
-            const routineMonday = getMonday($('#routine-create-date').val());
-            window.location.href = `/routines?date=${routineMonday}`;
+            window.location.href = `/routines`;
         } else {
             onError(response)
         }
