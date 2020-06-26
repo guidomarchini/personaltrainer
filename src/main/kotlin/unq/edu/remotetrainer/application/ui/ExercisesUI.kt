@@ -133,14 +133,11 @@ class ExercisesUI constructor(
 
     @GetMapping("export")
     fun export(model: Model): String {
-        logger.info("exports")
-
-        model["exercises"] = exerciseService.getAll()
-        model["blocks"] = exerciseBlockService.getAllNamedBlocks()
-        model["routines"] = routineService.getAll().sortedByDescending { routine -> routine.date }
-
+        logger.info("exports page")
         return "export"
     }
+
+
 
 
     /**
