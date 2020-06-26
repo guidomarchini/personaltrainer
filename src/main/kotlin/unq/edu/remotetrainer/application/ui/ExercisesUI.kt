@@ -131,6 +131,17 @@ class ExercisesUI constructor(
         return "upsert-routine"
     }
 
+    @GetMapping("export")
+    fun export(model: Model): String {
+        logger.info("exports")
+
+        model["exercises"] = exerciseService.getAll()
+        model["blocks"] = exerciseBlockService.getAllNamedBlocks()
+        model["routines"] = routineService.getAll().sortedByDescending { routine -> routine.date }
+
+        return "export"
+    }
+
 
     /**
      * Returns the current monday of the week

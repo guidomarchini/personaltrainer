@@ -1,0 +1,204 @@
+<html>
+    <head>
+        {{> common/common-libraries}}
+
+        <script>
+            // api calls
+            function exportContent() {
+                const body = {
+                    "exercises": selectedExercises(),
+                    "exerciseBlocks": selectedExerciseBlocks(),
+                    "routines": selectedRoutines()
+                }
+            }
+
+            function selectedExercises() {
+
+            }
+
+            function selectedExerciseBlocks() {
+
+            }
+
+            function selectedRoutines() {
+
+            }
+
+            // functionality
+            function searchBlock() {
+                const input = $('#block-search-input').val().toUpperCase()
+                $('.block-container').each(function(index){
+                    const _this = $(this)
+                    const blockName = _this.find('.block-name').text().toUpperCase()
+                    if (blockName.includes(input)) {
+                        _this.show()
+                    } else {
+                        _this.hide()
+                    }
+                })
+            }
+
+            function searchExercise() {
+                const input = $('#exercise-search-input').val().toUpperCase()
+                $('.exercise-container').each(function(index){
+                    const _this = $(this)
+                    const blockName = _this.find('.exercise-name').text().toUpperCase()
+                    if (blockName.includes(input)) {
+                        _this.show()
+                    } else {
+                        _this.hide()
+                    }
+                })
+            }
+        </script>
+    </head>
+
+    <body class="bg-light">
+        {{> common/navigation}}
+        {{> common/errors}}
+
+        <main role="main" class="container">
+            <h1 class="float-left">Exportar</h1>
+            <a href="#" data-toggle="tooltip" title="Genera un archivo para pasarles a tus clientes: ejercicios, bloques de ejercicios y rutinas">?</a>
+
+            <button type="button" class="btn btn-dark btn-lg" onclick="exportContent()">Exportar contenido</button>
+
+            <div class="container pt-3">
+                <!-- Exercises -->
+                <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="exercises-collapsable" data-target="#exercises-container">Ejercicios</a>
+                <div id="exercises-container" class="collapse pb-3">
+                    <div class="input-group md-form form-sm form-1 pl-0">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text cyan lighten-2">
+                                <i class="fas fa-search text-white" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input id="exercise-search-input" class="form-control my-0 py-1" type="text" onkeyup="searchExercise()" placeholder="Buscar ejercicio..." aria-label="Search" />
+                    </div>
+
+                    <div id="exercises">
+                    </div>
+                </div>
+
+                <!-- Blocks -->
+                <a href="#" class="container-sm btn btn-dark blocks-name" role="button" data-toggle="collapse" id="blocks-collapsable" data-target="#blocks-container">Bloques de ejercicio</a>
+                <div id="blocks-container" class="collapse pb-3">
+                    <div class="input-group md-form form-sm form-1 pl-0">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text cyan lighten-2">
+                                <i class="fas fa-search text-white" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <input id="block-search-input" class="form-control my-0 py-1" type="text" onkeyup="searchBlock()" placeholder="Buscar ejercicio..." aria-label="Search" />
+                    </div>
+
+                    <div id="blocks">
+                    </div>
+                </div>
+
+                <!-- Routines -->
+                <a href="#" class="container-sm btn btn-dark" role="button" data-toggle="collapse" id="routines-collapsable" data-target="#routines-container">Rutinas</a>
+                <div id="routines-container" class="collapse pb-3">
+                    <div id="routines">
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <script>
+            // following doesn't work even with document.onload
+            // fill exercises
+            fetch('api/exercises', {
+                method: 'GET'
+            }).then(function(response) {
+                if(response.ok) {
+                    const exercisesContainer = document.getElementById('exercises');
+
+                    response.json().then(data => {
+
+                        data.forEach(function(exercise) {
+                            exercisesContainer.appendChild(
+                                makeContent(
+                                    exercise,
+                                    'exercise',
+                                    exercise.name
+                                )
+                            )
+                        });
+                    })
+                } else {
+                    onError(response)
+                }
+            })
+
+            // fill blocks
+            fetch('/api/blocks?named=true', {
+                method: 'GET'
+            }).then(function(response) {
+                if(response.ok) {
+                    response.json().then(data => {
+                        const blocksContainer = document.getElementById('blocks');
+
+                        data.forEach(function(namedBlock) {
+                            blocksContainer.appendChild(
+                                makeContent(
+                                    namedBlock,
+                                    'block',
+                                    namedBlock.name
+                                )
+                            );
+                        });
+                    })
+                } else {
+                    onError(response);
+                }
+            });
+
+            fetch(`api/routines`, {
+                method: 'GET'
+            }).then(function(response) {
+                if(response.ok) {
+                    response.json().then(data => {
+                        const routinesContainer = document.getElementById('routines');
+
+                        data.forEach(function(routine) {
+                            routinesContainer.appendChild(
+                                makeContent(
+                                    routine,
+                                    'routine',
+                                    `${routine.date} ${routine.shortDescription}`
+                                )
+                            );
+                        });
+                    })
+                } else {
+                    onError(response);
+                }
+            })
+
+            function makeContent(content, contentType, innerText) {
+                const container = document.createElement('div');
+                container.className = `form-check ${contentType}-container`;
+
+                const checkbox = document.createElement('input');
+                checkbox.className = 'form-check-input';
+                checkbox.type = 'checkbox';
+                checkbox.value = '';
+                checkbox.id = `${contentType}-${content.id}`;
+                $(checkbox).data(content);
+                container.appendChild(checkbox);
+
+                const label = document.createElement('label');
+                label.className = `form-check-label ${contentType}-name`;
+                label.setAttribute('for', `${contentType}-${content.id}`);
+                label.innerText = innerText;
+                container.appendChild(label);
+
+                return container;
+            }
+
+            $('#nav-export').addClass('active')
+        </script>
+    </body>
+</html>
