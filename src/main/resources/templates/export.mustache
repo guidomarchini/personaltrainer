@@ -6,22 +6,31 @@
             // api calls
             function exportContent() {
                 const body = {
-                    "exercises": selectedExercises(),
-                    "exerciseBlocks": selectedExerciseBlocks(),
-                    "routines": selectedRoutines()
-                }
+                    "exercises": retrieveSelected('#exercises'),
+                    "exerciseBlocks": retrieveSelected('#blocks'),
+                    "routines": retrieveSelected('#routines')
+                };
+
+                const blob = new Blob(
+                    [JSON.stringify(body)],
+                    {type: 'text/plain'}
+                );
+
+                const fileUrl = window.URL.createObjectURL(blob);
+                const fileLink = document.createElement('a');
+                fileLink.href = fileUrl;
+                fileLink.download = 'export';
+                fileLink.click();
+                fileLink.remove();
             }
 
-            function selectedExercises() {
+            function retrieveSelected(containerSelector) {
+                let selectedData = []
+                $(containerSelector).find('.form-check-input:checked').each(function(index) {
+                    selectedData.push($(this).data())
+                });
 
-            }
-
-            function selectedExerciseBlocks() {
-
-            }
-
-            function selectedRoutines() {
-
+                return selectedData;
             }
 
             // functionality
@@ -58,10 +67,14 @@
         {{> common/errors}}
 
         <main role="main" class="container">
-            <h1 class="float-left">Exportar</h1>
-            <a href="#" data-toggle="tooltip" title="Genera un archivo para pasarles a tus clientes: ejercicios, bloques de ejercicios y rutinas">?</a>
+            <div class="container float-left">
+                <h1 class="float-left">Exportar</h1>
+                <a href="#" data-toggle="tooltip" title="Genera un archivo para pasarles a tus clientes: ejercicios, bloques de ejercicios y rutinas">?</a>
+            </div>
 
-            <button type="button" class="btn btn-dark btn-lg" onclick="exportContent()">Exportar contenido</button>
+            <div class="container float-left">
+                <button type="button" class="btn btn-dark btn-sm" onclick="exportContent()">Exportar contenido</button>
+            </div>
 
             <div class="container pt-3">
                 <!-- Exercises -->
