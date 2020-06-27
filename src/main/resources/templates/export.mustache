@@ -25,9 +25,10 @@
                 const fileUrl = window.URL.createObjectURL(blob);
                 const fileLink = document.createElement('a');
                 fileLink.href = fileUrl;
-                fileLink.download = 'export';
+                fileLink.download = 'RemoteTrainer - exportacion';
                 fileLink.click();
                 fileLink.remove();
+                onSuccess("Archivo generado!");
             }
 
             function retrieveSelected(containerSelector) {
