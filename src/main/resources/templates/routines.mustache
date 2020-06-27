@@ -48,7 +48,7 @@
                         $(`#routine-${id}`).remove();
                         $('#routine-delete-modal').modal('hide');
                     } else {
-                        onError(response);
+                        handleErrorResponse(response);
                     }
                 })
             }
@@ -57,8 +57,8 @@
 
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
         <main role="main" class="container-fluid h-100">
             <h1 class="float-left">Rutinas</h1>

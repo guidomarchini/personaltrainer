@@ -5,7 +5,7 @@
         <script>
             function importFile() {
                 if (document.getElementById("input-file").files.length === 0) {
-                    toast("Por favor, selecciona un archivo");
+                    onError("Por favor, selecciona un archivo");
                     return;
                 }
 
@@ -26,9 +26,9 @@
                     }
                 }).then(function(response) {
                     if(response.ok) {
-                        toast("Import successful!")
+                        onSuccess("Datos importados!")
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 });
             }
@@ -36,8 +36,8 @@
     </head>
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
         <main role="main" class="container">
             <div class="container float-left">

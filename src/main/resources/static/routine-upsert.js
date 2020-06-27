@@ -11,7 +11,7 @@ fetch('/api/exercises', {
             exercises = data;
         })
     } else {
-        onError(response);
+        handleErrorResponse(response);
     }
 });
 
@@ -267,7 +267,7 @@ function upsertRoutine(routineId, methodType) {
         if(response.ok) {
             window.location.href = `/routines`;
         } else {
-            onError(response)
+            handleErrorResponse(response)
         }
     })
 }

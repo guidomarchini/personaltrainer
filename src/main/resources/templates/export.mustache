@@ -2,6 +2,12 @@
     <head>
         {{> common/common-libraries}}
 
+        <style>
+            .form-check {
+                font-size: 30px;
+            }
+        </style>
+
         <script>
             // api calls
             function exportContent() {
@@ -63,17 +69,14 @@
     </head>
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
         <main role="main" class="container">
-            <div class="container float-left">
+            <div class="container pb-3">
                 <h1 class="float-left">Exportar</h1>
                 <a href="#" data-toggle="tooltip" title="Genera un archivo para pasarles a tus clientes: ejercicios, bloques de ejercicios y rutinas">?</a>
-            </div>
-
-            <div class="container float-left">
-                <button type="button" class="btn btn-dark btn-sm" onclick="exportContent()">Exportar contenido</button>
+                <button type="button" class="btn btn-dark float-right" onclick="exportContent()">Exportar contenido</button>
             </div>
 
             <div class="container pt-3">
@@ -141,7 +144,7 @@
                         });
                     })
                 } else {
-                    onError(response)
+                    handleErrorResponse(response)
                 }
             })
 
@@ -164,7 +167,7 @@
                         });
                     })
                 } else {
-                    onError(response);
+                    handleErrorResponse(response);
                 }
             });
 
@@ -186,7 +189,7 @@
                         });
                     })
                 } else {
-                    onError(response);
+                    handleErrorResponse(response);
                 }
             })
 

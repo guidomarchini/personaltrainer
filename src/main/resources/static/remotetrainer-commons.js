@@ -1,11 +1,21 @@
-function onError(response) {
+function handleErrorResponse(response) {
     response.json().then(data => {
-        $('.modal').modal('hide');
-        toast(data.message);
-    })
+        onError(data.message);
+    });
+}
+
+function onError(message) {
+    $('#toast-type').text('Error');
+    toast(message);
+}
+
+function onSuccess(message) {
+    $('#toast-type').text('Exito');
+    toast(message);
 }
 
 function toast(errorMessage) {
+    $('.modal').modal('hide');
     $('#error-msg').text(errorMessage);
     $('#error-toast').toast('show');
 }

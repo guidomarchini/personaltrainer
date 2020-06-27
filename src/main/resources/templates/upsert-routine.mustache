@@ -7,8 +7,8 @@
 
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
         <main role="main" class="container-fluid h-100">
             <div class="card">
@@ -132,7 +132,7 @@
                             });
                         })
                     } else {
-                        onError(response);
+                        handleErrorResponse(response);
                     }
                 });
 

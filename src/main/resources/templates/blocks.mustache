@@ -11,7 +11,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -42,7 +42,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -74,7 +74,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -137,8 +137,8 @@
 
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
         <main role="main" class="container">
             <h1 class="float-left">Bloques de ejercicio</h1>
@@ -351,7 +351,7 @@
                         exercises = data
                     })
                 } else {
-                    onError(response)
+                    handleErrorResponse(response)
                 }
             })
         </script>

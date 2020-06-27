@@ -10,7 +10,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -27,7 +27,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -44,7 +44,7 @@
                     if(response.ok) {
                         location.reload()
                     } else {
-                        onError(response)
+                        handleErrorResponse(response)
                     }
                 })
             }
@@ -65,8 +65,8 @@
     </head>
 
     <body class="bg-light">
-        {{> common/navigation}}
-        {{> common/errors}}
+        {{> common/navigation }}
+        {{> common/toast }}
 
 
         <main role="main" class="container">
