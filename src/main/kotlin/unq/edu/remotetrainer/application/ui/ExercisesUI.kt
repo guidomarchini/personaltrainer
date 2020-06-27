@@ -137,6 +137,12 @@ class ExercisesUI constructor(
         return "export"
     }
 
+    @GetMapping("import")
+    fun import(model: Model): String {
+        logger.info("imports page")
+        return "import"
+    }
+
 
 
 

@@ -18,4 +18,9 @@ class ExerciseBlockService @Autowired constructor(
             mapper.toModel(it)
         }
     }
+
+    fun getExerciseBlocksWithNameIn(names: List<String>): List<ExerciseBlock> {
+        return repository.getByNameIn(names)
+            .map { mapper.toModel(it) }
+    }
 }

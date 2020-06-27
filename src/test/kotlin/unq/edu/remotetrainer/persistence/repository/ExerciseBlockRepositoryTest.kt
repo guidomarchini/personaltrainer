@@ -42,13 +42,46 @@ internal class ExerciseBlockRepositoryTest @Autowired constructor(
         entityManager.flush()
 
         // act
-        val namedBlocks: List<ExerciseBlockEntity> =
-            repository.getAllByNameNotNull().toList()
+        val namedBlocks: Iterable<ExerciseBlockEntity> =
+            repository.getAllByNameNotNull()
 
         // assert
-        assertThat(namedBlocks.size).isEqualTo(1)
-        assertThat(namedBlocks.find { it.id == namedBlock.id }).isNotNull()
-        assertThat(namedBlocks.find { it.id == unnamedBlock.id }).isNull()
+        assertThat(namedBlocks).isNotNull()
+        assertThat(namedBlocks).hasSize(1)
+        assertThat(namedBlocks).containsExactly(namedBlock)
+    }
+
+    @Test
+    fun `it returns blocks for the given names`() {
+        // arrange
+        val namedBlock: ExerciseBlockEntity =
+            entityManager.persist(ExerciseBlockEntity(
+                name = "this block has to be returned",
+                exercises = mutableListOf(),
+                notes = ""
+            ))
+
+        val unnamedBlock: ExerciseBlockEntity =
+            entityManager.persist(ExerciseBlockEntity(
+                exercises = mutableListOf(),
+                notes = ""
+            ))
+
+        entityManager.flush()
+
+        val namesToSearch: List<String> = listOf(
+            namedBlock.name!!,
+            "unexistent block"
+        )
+
+        // act
+        val foundBlocks: Iterable<ExerciseBlockEntity> =
+            repository.getByNameIn(namesToSearch)
+
+        // assert
+        assertThat(foundBlocks).isNotNull()
+        assertThat(foundBlocks).hasSize(1)
+        assertThat(foundBlocks).containsExactly(namedBlock)
     }
 
     @Test

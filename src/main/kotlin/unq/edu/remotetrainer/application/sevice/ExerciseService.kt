@@ -17,4 +17,9 @@ class ExerciseService @Autowired constructor(
         return repository.getByName(name)
             ?.let { mapper.toModel(it) }
     }
+
+    fun getExerciseWithNameIn(names: List<String>): List<Exercise> {
+        return repository.getByNameIn(names)
+            .map { mapper.toModel(it) }
+    }
 }

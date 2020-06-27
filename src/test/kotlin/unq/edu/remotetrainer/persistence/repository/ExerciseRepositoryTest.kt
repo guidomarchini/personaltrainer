@@ -33,6 +33,35 @@ internal class ExerciseRepositoryTest @Autowired constructor(
     }
 
     @Test
+    fun `it gets all exercises with the passed names`() {
+        val pullups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "pullups",
+                description = "They're hard!"
+            ))
+
+        val pushups: ExerciseEntity =
+            entityManager.persistAndFlush(ExerciseEntity(
+                name = "pushups",
+                description = "you can start with these ones"
+            ))
+
+        val namesToSearch: List<String> = listOf(
+            pullups.name,
+            "unexistent exercise"
+        )
+
+        // act
+        val foundExercises: Iterable<ExerciseEntity> =
+            repository.getByNameIn(namesToSearch)
+
+        // assert
+        assertThat(foundExercises).isNotNull()
+        assertThat(foundExercises).hasSize(1)
+        assertThat(foundExercises).containsExactly(pullups)
+    }
+
+    @Test
     fun `it updates the instance`() {
         // arrange
         val oldDescription: String = "They're hard!"

@@ -1,0 +1,73 @@
+<html>
+    <head>
+        {{> common/common-libraries}}
+
+        <script>
+            function importFile() {
+                if (document.getElementById("input-file").files.length === 0) {
+                    toast("Por favor, selecciona un archivo");
+                    return;
+                }
+
+                const fr = new FileReader();
+                fr.onload=function(){
+                    importWithContent(fr.result);
+                }
+
+                fr.readAsText(document.getElementById('input-file').files[0]);
+            }
+
+            function importWithContent(fileContent) {
+                fetch('api/import', {
+                    method: 'POST',
+                    body: fileContent,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    if(response.ok) {
+                        location.reload()
+                    } else {
+                        onError(response)
+                    }
+                });
+            }
+        </script>
+    </head>
+
+    <body class="bg-light">
+        {{> common/navigation}}
+        {{> common/errors}}
+
+        <main role="main" class="container">
+            <div class="container float-left">
+                <h1 class="float-left">Importar</h1>
+                <a href="#" data-toggle="tooltip" title="Pedile los ejercicios, bloques y rutinas a tu entrenador y carga todo aca">?</a>
+            </div>
+
+            <div class="container float-left">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="input-file" aria-describedby="upload-button">
+                        <label class="custom-file-label" for="input-file">Seleccionar archivo...</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="button" id="upload-button" onclick="importFile()">Importar</button>
+                    </div>
+                </div>
+                <div id="file-content"></div>
+            </div>
+        </main>
+
+
+
+        <script>
+            $('#input-file').change(function(e){
+                const fileName = e.target.files[0].name;
+                $('.custom-file-label').html(fileName);
+            });
+
+            $('#nav-import').addClass('active')
+        </script>
+    </body>
+</html>

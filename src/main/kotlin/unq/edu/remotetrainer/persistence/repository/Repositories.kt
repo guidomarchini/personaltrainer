@@ -6,10 +6,16 @@ import unq.edu.remotetrainer.persistence.entity.*
 
 interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
     fun getByName(name: String): ExerciseEntity?
+
+    /** Gets all exercises for the given list of names. Used by import */
+    fun getByNameIn(names: List<String>): Iterable<ExerciseEntity>
 }
 
 interface ExerciseBlockRepository : CrudRepository<ExerciseBlockEntity, Int> {
     fun getAllByNameNotNull(): Iterable<ExerciseBlockEntity>
+
+    /** Gets all exercises for the given list of names. Used by import */
+    fun getByNameIn(names: List<String>): Iterable<ExerciseBlockEntity>
 }
 
 interface ExerciseTrackingRepository : CrudRepository<ExerciseTrackingEntity, Int>
