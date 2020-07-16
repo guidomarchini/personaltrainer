@@ -3,6 +3,11 @@
         {{> common/common-libraries}}
 
         <script src="/routine-upsert.js"></script>
+        <style>
+            .card {
+                background-color: inherit !important;
+            }
+        </style>
     </head>
 
 
@@ -11,7 +16,7 @@
         {{> common/toast }}
 
         <main role="main" class="container-fluid h-100">
-            <div class="card text-white bg-dark">
+            <div class="card">
                 <div class="card-header">
                     {{ #create }}
                     <h5 class="modal-title">Crear nueva rutina</h5>
@@ -68,7 +73,7 @@
                                                 <input class="block-quantity" value="{{quantity}}"></input>
                                             </th>
                                             <th scope="col">
-                                                <button type="button" class="btn btn-dark btn-sm" onclick="remove('repetition-{{id}}')">X</button>
+                                                <i class="material-icons md-24 delete" onclick="remove('repetition-{{id}}')">delete</i>
                                             </th>
                                         </tr>
                                         {{ /exercises }}
@@ -76,7 +81,7 @@
                                     </table>
 
                                     <div class="float-right">
-                                        <button class="btn btn-secondary btn-sm" onclick="remove('block-{{id}}');renameBlocks()">Eliminar bloque</button>
+                                        <button class="btn btn-secondary btn-sm" onclick="remove('block-{{id}}');renameBlocks()">Eliminar serie</button>
                                         <button class="btn btn-dark btn-sm" onclick="addExercise('block-{{id}}-exercises')">Agregar ejercicio</button>
                                     </div>
                                 </div>
@@ -87,14 +92,14 @@
                         <div class="float-right btn-toolbar" style="padding-top: 20px">
                             <div class="input-group mr-3">
                                 <select class="custom-select" id="named-blocks-select">
-                                    <option value="" disabled selected>Bloques existentes...</option>
+                                    <option value="" disabled selected>Series existentes...</option>
                                 </select>
                                 <div class="input-group-append">
                                     <button class="btn btn-dark btn-sm" type="button" onclick="addNamedBlock()">Copiar en la rutina</button>
                                 </div>
                             </div>
 
-                            <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock()">Agregar bloque de ejercicio</button>
+                            <button type="button" class="btn btn-dark btn-sm" onclick="addExerciseBlock()">Agregar serie de ejercicios</button>
                         </div>
                         {{ /routine }}
                     </div>

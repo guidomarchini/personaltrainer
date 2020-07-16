@@ -100,7 +100,7 @@ class ExercisesUI constructor(
         model["routine"] = RoutineDto(date = parsedDate)
         model["create"] = true
 
-        return "upsert-routine"
+        return "routine-upsert"
     }
 
     @GetMapping("routines/update")
@@ -114,7 +114,7 @@ class ExercisesUI constructor(
         model["routine"] = RoutineDto(routineToUpdate)
         model["create"] = false
 
-        return "upsert-routine"
+        return "routine-upsert"
     }
 
     @GetMapping("routines/copy")
@@ -128,7 +128,7 @@ class ExercisesUI constructor(
         model["routine"] = RoutineDto(routineToUpdate.copy(id = null))
         model["create"] = true
 
-        return "upsert-routine"
+        return "routine-upsert"
     }
 
     @GetMapping("export")

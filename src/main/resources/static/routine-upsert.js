@@ -52,7 +52,7 @@ function renameBlocks() {
         .children('.block-container')
         .children('.block-name')
         .each(function(index, nameContainer) {
-            nameContainer.innerText = `Bloque #${index}`;
+            nameContainer.innerText = `Serie #${index}`;
         });
 }
 
@@ -107,7 +107,7 @@ function addExerciseBlock() {
     const triggerButton = document.createElement('a');
     triggerButton.href = "#";
     triggerButton.className = 'btn btn-dark block-name btn-block';
-    triggerButton.innerText = `Bloque #${routineBlocks.childElementCount}`;
+    triggerButton.innerText = `Serie #${routineBlocks.childElementCount}`;
     triggerButton.onclick = function() {
         $(collapsibleContent).collapse('toggle');
     };
@@ -153,7 +153,7 @@ function blockButtons(blockContainer, exerciseBlockContainer) {
 
     const deleteBlockButton = document.createElement('button');
     deleteBlockButton.className = 'btn btn-secondary btn-sm';
-    deleteBlockButton.innerText = 'Eliminar bloque';
+    deleteBlockButton.innerText = 'Eliminar serie';
     deleteBlockButton.onclick = function() {
         $(blockContainer).remove();
         renameBlocks();
