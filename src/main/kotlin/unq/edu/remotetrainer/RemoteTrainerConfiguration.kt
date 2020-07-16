@@ -33,7 +33,7 @@ class RemoteTrainerConfiguration {
 
         val pushups =
             exerciseService.create(Exercise(
-                name = "Flexiones de brazo",
+                name = "Flexiones de brazos",
                 description = "Podes empezar con estas. Trabaja ese pectoral"
             ))
 

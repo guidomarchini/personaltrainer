@@ -6,6 +6,10 @@
             .form-check {
                 font-size: 30px;
             }
+
+            input[type=checkbox] {
+                transform: scale(1.5);
+            }
         </style>
 
         <script>
@@ -84,9 +88,7 @@
                 <h1 class="float-left">Exportar</h1>
                 <a href="#" data-toggle="tooltip" title="Genera un archivo para pasarles a tus clientes: ejercicios, bloques de ejercicios y rutinas">?</a>
 
-<!--                <button type="button" class="btn btn-dark float-right" onclick="exportContent()">Exportar contenido</button>-->
-
-                <div class="input-group mb-3 float-right">
+                <div class="input-group mb-3">
                     <input id="export-filename" type="text" class="form-control" placeholder="Nombre del archivo" aria-label="Nombre del archivo" aria-describedby="export-button">
                     <div class="input-group-append">
                         <button class="btn brn-dark btn-outline-secondary" type="button" id="export-button" onclick="exportContent()">Exportar contenido</button>

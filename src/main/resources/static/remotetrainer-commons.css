@@ -1,10 +1,28 @@
 html,
 body {
     overflow-x: hidden; /* Prevent scroll on narrow devices */
+    padding-top: 56px;
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'ABeeZee';
+    color: antiquewhite;
 }
 
-body {
-    padding-top: 56px;
+.delete:hover {
+    cursor: pointer;
+}
+
+.table {
+    color: inherit;
+}
+
+input, textarea, select {
+    background-color: gainsboro !important;
+}
+
+.input-label {
+    background-color: gainsboro;
 }
 
 @media (max-width: 991.98px) {
@@ -28,4 +46,12 @@ body {
         -webkit-transform: translateX(-100%);
         transform: translateX(-100%);
     }
+}
+
+.modal {
+    color: darkslategray;
+}
+
+#error-toast {
+    color: darkslategray;
 }

@@ -226,14 +226,13 @@ function exerciseRow() {
 
     const removeTh = document.createElement('th');
     removeTh.scope = 'col';
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'btn btn-dark btn-sm';
-    removeBtn.innerText = 'X';
-    removeTh.appendChild(removeBtn);
+    const removeIcon = document.createElement('i')
+    removeIcon.setAttribute('class', 'material-icons md-24 delete')
+    removeIcon.innerText = 'delete'
+    removeTh.appendChild(removeIcon);
     tr.appendChild(removeTh);
 
-    removeBtn.onclick = function(){
+    removeIcon.onclick = function(){
         $(tr).remove();
     };
 

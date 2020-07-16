@@ -118,15 +118,14 @@
 
                 const removeTh = document.createElement('th')
                 removeTh.setAttribute('scope', 'col')
-                const removeBtn = document.createElement('button')
-                removeBtn.setAttribute('type', 'button')
-                removeBtn.setAttribute('class', 'btn btn-dark btn-sm')
-                removeBtn.innerText = 'X'
-                removeTh.appendChild(removeBtn)
+                const removeIcon = document.createElement('i')
+                removeIcon.setAttribute('class', 'material-icons md-24 delete')
+                removeIcon.innerText = 'delete'
+                removeTh.appendChild(removeIcon)
                 tr.appendChild(removeTh)
 
                 document.getElementById(`block-${operation}-exercises`).appendChild(tr)
-                $(removeTh).find("button").click(function(){
+                $(removeIcon).click(function(){
                     document.getElementById(`block-${operation}-exercises`).removeChild(tr)
                 })
 
@@ -141,8 +140,8 @@
         {{> common/toast }}
 
         <main role="main" class="container">
-            <h1 class="float-left">Bloques de ejercicio</h1>
-            <a href="#" data-toggle="tooltip" title="Arma los bloques de ejercicio que sean comunes en varias rutinas para no tener que crearlas una y otra vez">?</a>
+            <h1 class="float-left">Series de ejercicios</h1>
+            <a href="#" data-toggle="tooltip" title="Arma las series de ejercicios que sean comunes en varias rutinas para no tener que crearlas una y otra vez">?</a>
 
             <div class="input-group md-form form-sm form-1 pl-0">
                 <div class="input-group-prepend">
@@ -152,14 +151,14 @@
                 </div>
                 <input id="block-search-input" class="form-control my-0 py-1" type="text" onkeyup="searchBlock()" placeholder="Buscar..." aria-label="Search" />
             </div>
-            <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#block-create-modal">Crear nuevo bloque de ejercicio</button>
+            <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#block-create-modal">Crear nueva serie de ejercicios</button>
 
             <div class="container pt-3">
                 {{#blocks}}
                 <div class="container block-container">
                     <a href="#" class="container-sm btn btn-dark block-name" role="button" data-toggle="collapse" id="block-name-{{id}}" data-target="#collapsable-{{id}}">{{name}}</a>
                     <div id="collapsable-{{id}}" class="collapse pb-3">
-                        <p class="list-group-item lead" id="block-notes-{{id}}">{{notes}}</p>
+                        <p class="lead" id="block-notes-{{id}}">{{notes}}</p>
                         <div class="container pb-2">
                             <table class="table table-stripped">
                                 <thead>
@@ -196,7 +195,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="block-create-title">Crear nuevo bloque de ejercicio</h5>
+                        <h5 class="modal-title" id="block-create-title">Crear nueva serie de ejercicios</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -241,7 +240,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="block-edit-title">Editar bloque de ejercicio</h5>
+                        <h5 class="modal-title" id="block-edit-title">Editar serie de ejercicios</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -284,7 +283,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="block-delete-title">Borrar bloque de ejercicio</h5>
+                        <h5 class="modal-title" id="block-delete-title">Borrar serie de ejercicios</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
