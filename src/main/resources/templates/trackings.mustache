@@ -33,10 +33,13 @@
             }
 
             function addTracking(id) {
-                const body = $('#tracking-add-quantity').val()
+                if (!validateNumber('tracking-add-quantity')) {
+                    return;
+                }
+
                 fetch(`api/trackings/${id}`, {
                     method: 'PUT',
-                    body: JSON.stringify(body),
+                    body: JSON.stringify($('#tracking-add-quantity').val()),
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -168,6 +171,9 @@
                         <div id="tracking-add-content">
                             <label for="tracking-add-quantity">Cuanto hiciste hoy?</label>
                             <input class="form-control" name="quantity" id="tracking-add-quantity"/>
+                            <div id="tracking-add-quantity-feedback" class="invalid-feedback">
+                                Por favor, ingresa un numero.
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

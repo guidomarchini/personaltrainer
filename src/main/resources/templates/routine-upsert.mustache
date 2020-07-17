@@ -26,20 +26,23 @@
                     {{ /create }}
                 </div>
                 <div class="card-body">
-                    <div id="routine-create-content">
+                    <div id="routine-upsert-content">
                         {{ #routine }}
                         <div>
-                            <label for="routine-create-date">Fecha: </label>
-                            <input class="form-control" name="name" id="routine-create-date" value="{{date}}" disabled/>
+                            <label for="routine-upsert-date">Fecha: </label>
+                            <input class="form-control" name="name" id="routine-upsert-date" value="{{date}}" disabled/>
                         </div>
                         <div>
-                            <label for="routine-create-description">Descripcion corta: </label>
+                            <label for="routine-upsert-description">Descripcion corta: </label>
                             <a href="#" data-toggle="tooltip" title="Una descripcion para identificar esta rutina.">?</a>
-                            <input class="form-control" name="name" id="routine-create-description" value="{{shortDescription}}"/>
+                            <input class="form-control" name="name" id="routine-upsert-description" value="{{shortDescription}}"/>
+                            <div id="routine-description-feedback" class="invalid-feedback">
+                                Por favor, introduci una descripcion.
+                            </div>
                         </div>
                         <div>
-                            <label for="routine-create-notes">Notas:</label>
-                            <textarea class="form-control" name="description" id="routine-create-notes">{{notes}}</textarea>
+                            <label for="routine-upsert-notes">Notas:</label>
+                            <textarea class="form-control" name="description" id="routine-upsert-notes">{{notes}}</textarea>
                         </div>
                         <div id="routine-blocks" class="py-3">
                             {{ #exerciseBlocks }}
@@ -71,6 +74,9 @@
                                             </th>
                                             <th scope="col">
                                                 <input class="block-quantity" value="{{quantity}}"></input>
+                                                <div class="invalid-feedback">
+                                                    Por favor, ingresa un numero.
+                                                </div>
                                             </th>
                                             <th scope="col">
                                                 <i class="material-icons md-24 delete" onclick="remove('repetition-{{id}}')">delete</i>

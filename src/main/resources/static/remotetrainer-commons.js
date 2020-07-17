@@ -31,3 +31,41 @@ $(function () {
 function remove(elementId) {
     $(`#${elementId}`).remove();
 }
+
+/**
+ * Validates that the text inside the selector has content.
+ * If the content is valid, then hides the error messages. If not, shows them.
+ * @param tagId, which has a ${selector}-feedback div that shows the error
+ * @returns {boolean} if the selector is valid
+ */
+function validateIsPresent(tagId) {
+    if($(`#${tagId}`).val()) {
+        $(`#${tagId}`).css('border-color', '');
+        $(`#${tagId}-feedback`).hide();
+        return true;
+    } else {
+        $(`#${tagId}`).css('border-color', 'red');
+        $(`#${tagId}-feedback`).show();
+        return false;
+    }
+}
+
+/**
+ * Validates that the text inside the selector has content and its a number.
+ * If the content is valid, then hides the error messages. If not, shows them.
+ * @param tagId, which has a ${selector}-feedback div that shows the error
+ * @returns {boolean} if the selector is valid
+ */
+function validateNumber(tagId) {
+    const contentValue = $(`#${tagId}`).val();
+
+    if(!contentValue || isNaN(contentValue)) {
+        $(`#${tagId}`).css('border-color', 'red');
+        $(`#${tagId}-feedback`).show();
+        return false;
+    } else {
+        $(`#${tagId}`).css('border-color', '');
+        $(`#${tagId}-feedback`).hide();
+        return true;
+    }
+}

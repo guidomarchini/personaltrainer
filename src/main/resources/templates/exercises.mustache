@@ -17,8 +17,12 @@
             }
 
             function createExercise() {
+                if(!validateIsPresent('exercise-create-name')) {
+                    return false;
+                }
+
                 let link = null
-                if ($('#exercise-create-link').val() != "") {
+                if ($('#exercise-create-link').val()) {
                     link = $('#exercise-create-link').val()
                 }
 
@@ -44,6 +48,10 @@
             }
 
             function editExercise(id) {
+                if(!validateIsPresent('exercise-edit-name')) {
+                    return false;
+                }
+
                 let link = null
                 if ($('#exercise-create-link').val() != "") {
                     link = $('#exercise-create-link').val()
@@ -142,6 +150,9 @@
                             <div>
                                 <label for="exercise-create-name">Nombre: </label>
                                 <input class="form-control" name="name" id="exercise-create-name"/>
+                                <div id="exercise-create-name-feedback" class="invalid-feedback">
+                                    Por favor, introduci un nombre.
+                                </div>
                             </div>
                             <div>
                                 <label for="exercise-create-description">Descripcion:</label>
@@ -176,6 +187,9 @@
                             <div>
                                 <label for="exercise-edit-name">Nombre: </label>
                                 <input class="form-control" name="name" id="exercise-edit-name"/>
+                                <div id="exercise-edit-name-feedback" class="invalid-feedback">
+                                    Por favor, introduci un nombre.
+                                </div>
                             </div>
                             <div>
                                 <label for="exercise-edit-description">Descripcion:</label>

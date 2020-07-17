@@ -222,6 +222,12 @@ function exerciseRow() {
     const quantityInput = document.createElement('input');
     quantityInput.className = 'block-quantity';
     quantityTh.appendChild(quantityInput);
+
+    const quantityError = document.createElement('div')
+    quantityError.className = 'invalid-feedback'
+    quantityError.innerText = 'Por favor, ingresa un numero'
+    quantityTh.appendChild(quantityError)
+
     tr.appendChild(quantityTh);
 
     const removeTh = document.createElement('th');
@@ -252,6 +258,10 @@ function updateRoutine(routineId) {
 }
 
 function upsertRoutine(routineId, methodType) {
+    if (!validRoutine()) {
+        return;
+    }
+
     const body = extractRoutine(routineId);
 
     console.log(body);
@@ -277,10 +287,10 @@ function upsertRoutine(routineId, methodType) {
 function extractRoutine(routineId) {
     return {
         'id': routineId,
-        'date': $('#routine-create-date').val(),
-        'shortDescription': $('#routine-create-description').val(),
+        'date': $('#routine-upsert-date').val(),
+        'shortDescription': $('#routine-upsert-description').val(),
         'exerciseBlocks': extractBlocks(),
-        'notes': $('#routine-create-notes').val()
+        'notes': $('#routine-upsert-notes').val()
     }
 }
 
@@ -333,4 +343,43 @@ function extractBlockExercises(blockContainer) {
     });
 
     return blockExercises;
+}
+
+/**
+ * Validates the routine, showing and highlighting the error messages
+ */
+function validRoutine() {
+    // done separately so they both are checked
+    const validShortDescription = validateShortDescription();
+    const validQuantities = validateQuantities();
+
+    return validShortDescription && validQuantities;
+}
+
+function validateShortDescription() {
+    if(!$('#routine-upsert-description').val()) {
+        $('#routine-upsert-description').css('border-color', 'red');
+        $('#routine-description-feedback').show();
+        return false;
+    } else {
+        $('#routine-upsert-description').css('border-color', '');
+        $('#routine-description-feedback').hide();
+        return true;
+    }
+}
+
+function validateQuantities() {
+    let validQuantities = true;
+    $(`.block-exercises tr`).each(function() {
+        const quantity = $(this).find(`.block-quantity`).val();
+        if (!quantity || isNaN(quantity)) {
+            $(this).find(`.block-quantity`).css('border-color', 'red');
+            $(this).find('.invalid-feedback').show();
+            validQuantities = false;
+        } else {
+            $(this).find(`.block-quantity`).css('border-color', '');
+            $(this).find('.invalid-feedback').hide();
+        }
+    });
+    return validQuantities;
 }
