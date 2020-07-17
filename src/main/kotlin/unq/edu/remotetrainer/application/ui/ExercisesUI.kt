@@ -39,7 +39,7 @@ class ExercisesUI constructor(
     @GetMapping("/exercises")
     fun exercises(model: Model): String {
         // TODO sorted by name
-        model["exercises"] = exerciseService.getAll()
+        model["exercises"] = exerciseService.getOrderedByName()
 
         return "exercises"
     }
@@ -53,7 +53,7 @@ class ExercisesUI constructor(
             allTrackings.mapTo(HashSet(), { it.exercise })
 
         val exercisesNotBeingTracked: List<Exercise> =
-            exerciseService.getAll().filter {
+            exerciseService.getOrderedByName().filter {
                 !trackedExercises.contains(it)
         }
 
@@ -95,7 +95,7 @@ class ExercisesUI constructor(
     ): String {
         // can't receive a LocalDate :(
         val parsedDate: LocalDate = LocalDate.parse(dateAsString)
-        logger.info("creating a new routien for (default) date: $parsedDate")
+        logger.info("creating a new routine for (default) date: $parsedDate")
 
         model["routine"] = RoutineDto(date = parsedDate)
         model["create"] = true

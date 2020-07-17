@@ -36,6 +36,10 @@
                 padding-top: 15px;
                 padding-bottom: 15px;
             }
+
+            .capitalized::first-letter {
+                text-transform: uppercase;
+            }
         </style>
 
         <script>
@@ -65,20 +69,20 @@
             <a href="#" data-toggle="tooltip" title="Aca podes ver tus rutinas de ejercicios.">?</a>
 
             <div class="week-nav container-fluid">
-                <h4>{{month}}</h4>
+                <h4 class="capitalized">{{month}}</h4>
                 <div class="buttons-container">
                     <a href="/routines?date={{previousWeek}}">Anterior</a>
                     <a href="/routines?date={{nextWeek}}">Siguiente</a>
                 </div>
             </div>
 
-            <div class="container-fluid float-left">
+            <div class="container-fluid">
                 <div class="row h-100">
                     {{ #routineDays }}
                     <div class="col-sm day-column">
-                        <div class="day-name w-100">{{dateDay}}</div>
+                        <div class="day-name capitalized w-100">{{dateDay}}</div>
                         <div class="number-in-month">{{dateNumber}}</div>
-                        <div class="routine-create-container container-fluid">
+                        <div class="container-fluid">
                             <a class="btn btn-dark btn-lg" href="/routines/create?date={{date}}">Crear</a>
                         </div>
 

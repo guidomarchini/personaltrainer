@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository
 import unq.edu.remotetrainer.persistence.entity.*
 
 interface ExerciseRepository : CrudRepository<ExerciseEntity, Int> {
+    fun getAllByOrderByName(): Iterable<ExerciseEntity>
+
     fun getByName(name: String): ExerciseEntity?
 
     /** Gets all exercises for the given list of names. Used by import */
