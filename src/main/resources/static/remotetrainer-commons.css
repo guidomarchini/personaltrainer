@@ -3,8 +3,7 @@ body {
     overflow-x: hidden; /* Prevent scroll on narrow devices */
     padding-top: 56px;
     background-image: url("background.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     font-family: 'ABeeZee';
     color: antiquewhite;
 }

@@ -32,9 +32,9 @@
 
                 const filename = $('#export-filename').val();
                 if (filename) {
-                    fileLink.download = filename;
+                    fileLink.download = `${filename}.rt`;
                 } else {
-                    fileLink.download = 'RemoteTrainer - exportacion';
+                    fileLink.download = 'RemoteTrainer - exportacion.rt';
                 }
                 fileLink.click();
                 fileLink.remove();
