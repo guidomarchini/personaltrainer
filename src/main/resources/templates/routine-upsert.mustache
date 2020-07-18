@@ -47,7 +47,10 @@
                         <div id="routine-blocks" class="py-3">
                             {{ #exerciseBlocks }}
                             <div class="container-fluid block-container" id="block-{{id}}">
+                                {{ ^create }}
                                 <input type="hidden" class="block-id" value="{{id}}"></input>
+                                {{ /create }}
+
                                 <a href="#" class="btn btn-dark block-name btn-block" data-toggle="collapse" data-target="#collapsible-{{id}}" role="button" aria-expanded="true">this will be replaced onload</a>
 
                                 <div class="pb-5 collapse" id="collapsible-{{id}}">
