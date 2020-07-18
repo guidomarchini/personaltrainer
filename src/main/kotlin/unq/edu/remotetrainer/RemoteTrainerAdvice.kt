@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import unq.edu.remotetrainer.application.rest.exception.EntityNotFoundException
 import unq.edu.remotetrainer.application.rest.exception.ValidationError
+import unq.edu.remotetrainer.application.utils.ErrorResponse
 
 /**
  * Defines the exceptions return http status code
@@ -23,16 +24,16 @@ class RemoteTrainerAdvice {
     @ResponseBody
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun entityNotFoundHandler(exception: EntityNotFoundException): String {
+    fun entityNotFoundHandler(exception: EntityNotFoundException): ErrorResponse {
         logger.error(exception.toString(), exception)
-        return exception.toString()
+        return ErrorResponse(exception.localizedMessage)
     }
 
     @ResponseBody
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun invalidRequestHandler(error: ValidationError): String {
+    fun invalidRequestHandler(error: ValidationError): ErrorResponse {
         logger.error("validation error: $error", error)
-        return error.toString()
+        return ErrorResponse(error.localizedMessage)
     }
 }

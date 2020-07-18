@@ -1,6 +1,8 @@
 function handleErrorResponse(response) {
     response.json().then(data => {
-        onError(data.message);
+        if(data.errorMessage) {
+            onError(data.errorMessage);
+        }
     });
 }
 
