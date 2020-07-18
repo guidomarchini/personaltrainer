@@ -8,6 +8,10 @@ body {
     color: antiquewhite;
 }
 
+a {
+    color: #CA7414;
+}
+
 .delete:hover {
     cursor: pointer;
 }
