@@ -21,14 +21,20 @@ class ExerciseBlockController constructor(
     }
 
     @GetMapping("/blocks")
-    fun blocks(@RequestParam named: Boolean?): List<ExerciseBlock> {
-        if (named != null && named) {
+    fun blocks(
+            @RequestParam named: Boolean,
+            @RequestParam ordered: Boolean
+    ): List<ExerciseBlock> {
+
+        val blocks: List<ExerciseBlock> = if (named) {
             logger.info("Retrieving named ExcerciseBlocks")
-            return exerciseBlockService.getAllNamedBlocks()
+            exerciseBlockService.getAllNamedBlocks()
         } else {
             logger.info("Retrieving all ExcerciseBlocks")
-            return exerciseBlockService.getAll()
+            exerciseBlockService.getAll()
         }
+
+        return if (ordered) blocks.sortedBy { it.name } else blocks
     }
 
     @GetMapping("/blocks/{id}")

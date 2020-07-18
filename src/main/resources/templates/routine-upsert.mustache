@@ -129,7 +129,7 @@
                     window.location.href = `/routines`;
                 }
 
-                fetch('/api/blocks?named=true', {
+                fetch('/api/blocks?named=true&ordered=true', {
                     method: 'GET'
                 }).then(function(response) {
                     if(response.ok) {

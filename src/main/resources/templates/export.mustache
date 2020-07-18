@@ -182,7 +182,7 @@
         <script>
             // following doesn't work even with document.onload
             // fill exercises
-            fetch('api/exercises', {
+            fetch('api/exercises?ordered=true', {
                 method: 'GET'
             }).then(function(response) {
                 if(response.ok) {
@@ -206,7 +206,7 @@
             })
 
             // fill blocks
-            fetch('/api/blocks?named=true', {
+            fetch('/api/blocks?named=true&ordered=true', {
                 method: 'GET'
             }).then(function(response) {
                 if(response.ok) {

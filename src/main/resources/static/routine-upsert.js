@@ -3,7 +3,7 @@
  * ******************** */
 let exercises;
 
-fetch('/api/exercises', {
+fetch('/api/exercises?ordered=true', {
     method: 'GET'
 }).then(function(response) {
     if(response.ok) {

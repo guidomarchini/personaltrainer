@@ -22,9 +22,9 @@ class ExerciseController constructor(
     }
 
     @GetMapping("/exercises")
-    fun exercises(): List<Exercise> {
+    fun exercises(@RequestParam ordered: Boolean): List<Exercise> {
         logger.info("Retrieving all Exercises")
-        return exerciseService.getAll()
+        return if(ordered) exerciseService.getOrderedByName() else exerciseService.getAll()
     }
 
     @GetMapping("/exercises/{id}")
